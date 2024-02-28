@@ -24,5 +24,8 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
+  },
+  "dependencies": {
+    "execa": "^8.0.1"
   }
 }
