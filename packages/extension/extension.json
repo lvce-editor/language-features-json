@@ -1,0 +1,19 @@
+{
+  "id": "builtin.language-features-json",
+  "name": "Language Features json",
+  "description": "Provides rich language support for JSON files",
+  "activation": [
+    "onLanguage:json",
+    "onCompletion:json",
+    "onTabCompletion:json"
+  ],
+  "browser": "src/languageFeaturesJsonMain.js",
+  "icon": "./icon.png",
+  "commands": [],
+  "languages": [
+    {
+      "id": "json",
+      "extensions": [".json"]
+    }
+  ]
+}
