@@ -1,10 +1,7 @@
-import { execSync } from 'child_process'
-import fs, { readFileSync, writeFileSync } from 'fs'
+import { packageExtension } from '@lvce-editor/package-extension'
+import fs, { readFileSync } from 'fs'
 import path, { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
-import { packageExtension } from '@lvce-editor/package-extension'
-
-const NOT_NEEDED = []
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -40,24 +37,6 @@ fs.cpSync(join(extension, 'src'), join(root, 'dist', 'src'), {
 fs.cpSync(join(jsonWorker, 'src'), join(root, 'dist', 'json-worker', 'src'), {
   recursive: true,
 })
-fs.cpSync(join(jsonWorker, 'data'), join(root, 'dist', 'json-worker', 'data'), {
-  recursive: true,
-})
-
-const workerUrlFilePath = path.join(
-  root,
-  'dist',
-  'src',
-  'parts',
-  'jsonWorkerUrl',
-  'jsonWorkerUrl.js'
-)
-const oldContent = readFileSync(workerUrlFilePath, 'utf8')
-const newContent = oldContent.replace(
-  '../../../../json-worker/src/jsonWorkerMain.js',
-  '../../../json-worker/src/jsonWorkerMain.js'
-)
-writeFileSync(workerUrlFilePath, newContent)
 
 await packageExtension({
   highestCompression: true,

@@ -1,5 +1,5 @@
 import { exportStatic } from '@lvce-editor/shared-process'
-import { cp, readdir, readFile, writeFile } from 'node:fs/promises'
+import { cp, readdir } from 'node:fs/promises'
 import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -20,7 +20,7 @@ const isCommitHash = (dirent) => {
 const dirents = await readdir(path.join(root, 'dist'))
 const commitHash = dirents.find(isCommitHash) || ''
 
-for (const dirent of ['src', 'data']) {
+for (const dirent of ['src']) {
   await cp(
     path.join(root, 'packages', 'json-worker', dirent),
     path.join(
@@ -35,21 +35,3 @@ for (const dirent of ['src', 'data']) {
     { recursive: true, force: true }
   )
 }
-
-const workerUrlFilePath = path.join(
-  root,
-  'dist',
-  commitHash,
-  'extensions',
-  'builtin.language-features-json',
-  'src',
-  'parts',
-  'jsonWorkerUrl',
-  'jsonWorkerUrl.js'
-)
-const oldContent = await readFile(workerUrlFilePath, 'utf8')
-const newContent = oldContent.replace(
-  '../../../../json-worker/src/jsonWorkerMain.js',
-  '../../../json-worker/src/jsonWorkerMain.js'
-)
-await writeFile(workerUrlFilePath, newContent)
