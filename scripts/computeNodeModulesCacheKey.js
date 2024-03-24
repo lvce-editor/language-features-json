@@ -11,6 +11,7 @@ const locations = [
   'lerna.json',
   'package-lock.json',
   'packages/e2e/package-lock.json',
+  'packages/build/package-lock.json',
   'packages/extension/package-lock.json',
   'packages/json-worker/package-lock.json',
   '.github/workflows/ci.yml',
