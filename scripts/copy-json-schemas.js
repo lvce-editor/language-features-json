@@ -1,6 +1,6 @@
 import { execaCommand } from 'execa'
-import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
-import path, { basename, dirname } from 'node:path'
+import { cp, mkdir, rm } from 'node:fs/promises'
+import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -8,19 +8,6 @@ const root = path.join(__dirname, '..')
 
 const REPO = 'https://github.com/SchemaStore/schemastore'
 const COMMIT = '93796f920ccb0efa89b6972bb577eda2f9dbd443'
-
-const getTestName = (baseName) => {
-  return (
-    'devtools-frontend-' +
-    baseName
-      .toLowerCase()
-      .trim()
-      .replaceAll(' ', '-')
-      .replaceAll('/', '-')
-      .replaceAll(',', '')
-      .replaceAll('_', '-')
-  )
-}
 
 const main = async () => {
   process.chdir(root)
