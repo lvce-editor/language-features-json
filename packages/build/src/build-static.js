@@ -3,6 +3,13 @@ import { cp, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { root } from './root.js'
 
+await import('./build.js')
+
+await cp(path.join(root, 'dist'), path.join(root, 'dist2'), {
+  recursive: true,
+  force: true,
+})
+
 await exportStatic({
   extensionPath: 'packages/extension',
   testPath: 'packages/e2e',
@@ -17,18 +24,14 @@ const isCommitHash = (dirent) => {
 const dirents = await readdir(path.join(root, 'dist'))
 const commitHash = dirents.find(isCommitHash) || ''
 
-for (const dirent of ['src']) {
-  await cp(
-    path.join(root, 'packages', 'json-worker', dirent),
-    path.join(
-      root,
-      'dist',
-      commitHash,
-      'extensions',
-      'builtin.language-features-json',
-      'json-worker',
-      dirent
-    ),
-    { recursive: true, force: true }
-  )
-}
+await cp(
+  path.join(root, 'dist2'),
+  path.join(
+    root,
+    'dist',
+    commitHash,
+    'extensions',
+    'builtin.language-features-json'
+  ),
+  { recursive: true, force: true }
+)
