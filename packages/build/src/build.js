@@ -1,4 +1,4 @@
-import { packageExtension } from '@lvce-editor/package-extension'
+import { packageExtension, bundleJs } from '@lvce-editor/package-extension'
 import fs, { readFileSync } from 'fs'
 import path, { join } from 'path'
 import { root } from './root.js'
@@ -34,6 +34,11 @@ fs.cpSync(join(extension, 'src'), join(root, 'dist', 'src'), {
 fs.cpSync(join(jsonWorker, 'src'), join(root, 'dist', 'json-worker', 'src'), {
   recursive: true,
 })
+
+await bundleJs(
+  join(root, 'dist', 'json-worker', 'src', 'jsonWorkerMain.ts'),
+  join(root, 'dist', 'json-worker', 'dist', 'jsonWorkerMain.js')
+)
 
 await packageExtension({
   highestCompression: true,
