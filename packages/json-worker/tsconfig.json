@@ -13,7 +13,8 @@
     "assumeChangesOnlyAffectDirectDependencies": true,
     "strict": true,
     "noImplicitAny": false,
-    "rootDir": "."
+    "rootDir": ".",
+    "composite": true
   },
   "include": ["src", "test"]
 }
