@@ -2,7 +2,7 @@
   "name": "json-worker",
   "version": "0.0.0-dev",
   "description": "",
-  "main": "src/jsonWorkerMain.js",
+  "main": "src/jsonWorkerMain.ts",
   "type": "module",
   "scripts": {
     "test-skip": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles --forceExit",
