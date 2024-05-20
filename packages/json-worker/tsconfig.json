@@ -15,7 +15,8 @@
     "noImplicitAny": false,
     "rootDir": ".",
     "composite": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "test"]
 }
