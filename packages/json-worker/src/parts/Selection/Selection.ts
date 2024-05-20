@@ -1,6 +1,7 @@
 export const expand = (textDocument, positions) => {
   const { text } = textDocument
-  const [startRowIndex, startColumnIndex, endRowIndex, endColumnIndex] = positions
+  const [startRowIndex, startColumnIndex, endRowIndex, endColumnIndex] =
+    positions
   let newStartColumnIndex = startColumnIndex
   while (newStartColumnIndex-- > 0) {
     if (text[newStartColumnIndex] === '"') {
@@ -15,7 +16,5 @@ export const expand = (textDocument, positions) => {
       break
     }
   }
-  return [
-    startRowIndex, newStartColumnIndex, endRowIndex, newEndColumnIndex
-  ]
+  return [startRowIndex, newStartColumnIndex, endRowIndex, newEndColumnIndex]
 }
