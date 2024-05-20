@@ -4,7 +4,7 @@
     "checkJs": true,
     "module": "esnext",
     "target": "esnext",
-    "types": ["node", "jest"],
+    "types": [],
     "moduleResolution": "node",
     "skipLibCheck": true,
     "noEmit": true,
@@ -13,7 +13,8 @@
     "assumeChangesOnlyAffectDirectDependencies": true,
     "strict": true,
     "noImplicitAny": false,
-    "composite": true
+    "composite": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]
 }

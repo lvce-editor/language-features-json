@@ -1,3 +1,5 @@
+import * as LanguageFeatures from './parts/LanguageFeatures/LanguageFeatures.js'
+
 export const activate = () => {
-  console.log('hello world')
+  LanguageFeatures.register()
 }
