@@ -1,6 +1,7 @@
 import { exportStatic } from '@lvce-editor/shared-process'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { cp, readdir } from 'node:fs/promises'
-import path from 'node:path'
+import path, { join } from 'node:path'
 import { root } from './root.js'
 
 await import('./build.js')
@@ -31,7 +32,38 @@ await cp(
     'dist',
     commitHash,
     'extensions',
-    'builtin.language-features-json'
+    'builtin.language-features-json',
   ),
-  { recursive: true, force: true }
+  { recursive: true, force: true },
+)
+
+const updateJson = (path, update) => {
+  const oldJson = JSON.parse(readFileSync(path, 'utf8'))
+  const newJson = update(oldJson)
+  writeFileSync(path, JSON.stringify(newJson, null, 2) + '\n')
+}
+
+const fileMapPath = join(root, 'dist', commitHash, 'config', 'fileMap.json')
+const updateFileMap = (oldFileMap) => {
+  return [...oldFileMap, '/playground/languages/file.json']
+}
+updateJson(fileMapPath, updateFileMap)
+
+const fileJsonPath = join(
+  root,
+  'dist',
+  commitHash,
+  'playground',
+  'languages',
+  'file.json',
+)
+writeFileSync(
+  fileJsonPath,
+  JSON.stringify(
+    {
+      key: 'value',
+    },
+    null,
+    2,
+  ) + '\n',
 )
