@@ -1,1 +1,1 @@
-console.log('hello from json worker')
+export * from './parts/Main/Main.ts'
