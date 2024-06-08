@@ -37,7 +37,7 @@ const parseObject = (scanner) => {
 }
 
 const parseArray = (scanner) => {
-  const array = []
+  const array: any[] = []
   outer: while (true) {
     const token = scanner.scanValue()
     switch (token) {
