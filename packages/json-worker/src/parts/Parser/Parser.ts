@@ -6,7 +6,10 @@ import * as ParsePropertyColon from '../ParsePropertyColon/ParsePropertyColon.ts
 import * as ParsePropertyName from '../ParsePropertyName/ParsePropertyName.ts'
 import * as ParseString from '../ParseString/ParseString.ts'
 
-const parseObject = (scanner) => {
+const parseObject = (scanner, ast) => {
+  ast.push({
+    type: 'object',
+  })
   const object = {}
   outer: while (true) {
     const token = scanner.scanValue()
@@ -62,9 +65,10 @@ const parseArray = (scanner) => {
 
 export const parseValue = (scanner) => {
   const token = scanner.scanValue()
+  const ast = []
   switch (token) {
     case TokenType.CurlyOpen:
-      return parseObject(scanner)
+      return parseObject(scanner, ast)
     case TokenType.DoubleQuote:
       return ParseString.parseString(scanner)
     case TokenType.Numeric:
