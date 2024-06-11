@@ -5,10 +5,11 @@ import * as ParseNumber from '../ParseNumber/ParseNumber.ts'
 import * as ParsePropertyColon from '../ParsePropertyColon/ParsePropertyColon.ts'
 import * as ParsePropertyName from '../ParsePropertyName/ParsePropertyName.ts'
 import * as ParseString from '../ParseString/ParseString.ts'
+import * as ParserTokenType from '../TokenType/TokenType.ts'
 
 const parseObject = (scanner, ast) => {
   ast.push({
-    type: 'object',
+    type: ParserTokenType.Object,
   })
   const object = {}
   outer: while (true) {
