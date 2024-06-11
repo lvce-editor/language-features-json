@@ -9,6 +9,7 @@ import { root } from './root.js'
 
 const extension = path.join(root, 'packages', 'extension')
 const jsonWorker = path.join(root, 'packages', 'json-worker')
+const schemas = path.join(root, 'packages', 'schemas')
 
 fs.rmSync(join(root, 'dist'), { recursive: true, force: true })
 
@@ -36,6 +37,9 @@ fs.cpSync(join(extension, 'src'), join(root, 'dist', 'src'), {
   recursive: true,
 })
 fs.cpSync(join(jsonWorker, 'src'), join(root, 'dist', 'json-worker', 'src'), {
+  recursive: true,
+})
+fs.cpSync(join(schemas, 'src'), join(root, 'dist', 'schemas', 'src'), {
   recursive: true,
 })
 
