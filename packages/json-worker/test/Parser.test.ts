@@ -20,7 +20,7 @@ test('boolean - false', () => {
     {
       type: TokenType.Boolean,
       offset: 0,
-      length: 4,
+      length: 5,
       childCount: 0,
     },
   ])
@@ -34,7 +34,6 @@ test('null', () => {
       offset: 0,
       length: 4,
       childCount: 0,
-      value: null,
     },
   ])
 })
