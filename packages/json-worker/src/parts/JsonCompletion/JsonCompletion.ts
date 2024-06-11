@@ -8,16 +8,6 @@ import * as Jsonc from '../Jsonc/Jsonc.ts'
 import * as TokenType from '../TokenType/TokenType.ts'
 import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
 
-const schema = {
-  type: 'object',
-  properties: {
-    type: {
-      type: 'string',
-      enum: ['commonjs', 'module'],
-    },
-  },
-}
-
 export const jsonCompletion = async (
   textDocument: any,
   offset: number,
