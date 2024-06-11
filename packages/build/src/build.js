@@ -9,6 +9,7 @@ import { root } from './root.js'
 
 const extension = path.join(root, 'packages', 'extension')
 const jsonWorker = path.join(root, 'packages', 'json-worker')
+const schemas = path.join(root, 'packages', 'schemas')
 
 fs.rmSync(join(root, 'dist'), { recursive: true, force: true })
 
@@ -38,6 +39,9 @@ fs.cpSync(join(extension, 'src'), join(root, 'dist', 'src'), {
 fs.cpSync(join(jsonWorker, 'src'), join(root, 'dist', 'json-worker', 'src'), {
   recursive: true,
 })
+fs.cpSync(join(schemas, 'src'), join(root, 'dist', 'schemas', 'src'), {
+  recursive: true,
+})
 
 const workerUrlFilePath = path.join(
   root,
@@ -51,6 +55,20 @@ await replace({
   path: workerUrlFilePath,
   occurrence: 'src/jsonWorkerMain.ts',
   replacement: 'dist/jsonWorkerMain.js',
+})
+
+const getSchemaAbsoluteUriPath = path.join(
+  root,
+  'dist',
+  'src',
+  'parts',
+  'GetSchemaAbsoluteUri',
+  'GetSchemaAbsoluteUri.js',
+)
+await replace({
+  path: getSchemaAbsoluteUriPath,
+  occurrence: '../../../../schemas',
+  replacement: '../../../schemas',
 })
 
 await bundleJs(
