@@ -1,15 +1,7 @@
-const schemaBaseUri = '../../../../schemas'
-
-const getSchemaAbsoluteUrl = (schemaUri) => {
-  const absoluteUrl = new URL(
-    `${schemaBaseUri}/${schemaUri}`,
-    import.meta.url,
-  ).toString()
-  return absoluteUrl
-}
+import * as GetSchemaAbsoluteUri from '../GetSchemaAbsoluteUri/GetSchemaAbsoluteUri.js'
 
 export const loadSchema = async (schemaUri) => {
-  const absoluteUrl = getSchemaAbsoluteUrl(schemaUri)
+  const absoluteUrl = GetSchemaAbsoluteUri.getSchemaAbsoluteUrl(schemaUri)
   const response = await fetch(absoluteUrl)
   if (!response.ok) {
     throw new Error(response.statusText)
