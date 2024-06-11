@@ -26,7 +26,6 @@ export const jsonCompletion = (
     return []
   }
   if (node.type === TokenType.String) {
-    console.log({ parsed, text, node })
     const options = schema.properties.type.enum
     return options.map(EnumToCompletionOption.enumToCompletionOption)
   }
