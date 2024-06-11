@@ -1,7 +1,7 @@
 import * as CharCode from '../JsoncCharCode/JsoncCharCode.ts'
 import * as TokenType from '../JsoncTokenType/JsoncTokenType.ts'
 
-export const createScanner = (text) => {
+export const createScanner = (text: string) => {
   let offset = 0
   const length = text.length
 
