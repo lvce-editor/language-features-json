@@ -25,7 +25,7 @@ const parseObject = (scanner, ast) => {
         scanner.goBack(1)
         const propertyName = ParsePropertyName.parsePropertyName(scanner)
         ParsePropertyColon.parsePropertyColon(scanner)
-        const value = parseValue(scanner, ast)
+        const value = parseValueInternal(scanner, ast)
         object[propertyName] = value
       case TokenType.Comma:
         break
@@ -42,7 +42,19 @@ const parseObject = (scanner, ast) => {
   return object
 }
 
-const parseArray = (scanner, ast) => {
+const parseArray = (scanner: Scanner, ast: AstNode[]): void => {
+  const node: AstNode = {
+    type: ParserTokenType.Array,
+    offset: scanner.getOffset() - 1,
+    length: 0,
+    childCount: 0,
+  }
+  ast.push({
+    type: ParserTokenType.Array,
+    offset: scanner.getOffset() - 1,
+    length: 0,
+    childCount: 0,
+  })
   const array: any[] = []
   outer: while (true) {
     const token = scanner.scanValue()
@@ -56,17 +68,21 @@ const parseArray = (scanner, ast) => {
         break
       default:
         scanner.goBack(1)
-        const value = parseValue(scanner)
+        const value = parseValueInternal(scanner, ast)
         array.push(value)
         break
       case TokenType.Comma:
         break
     }
   }
-  return array
+  node.childCount = array.length
+  node.length = scanner.getOffset() - node.offset
 }
 
-export const parseValue = (scanner: Scanner, ast = []): readonly AstNode[] => {
+export const parseValueInternal = (
+  scanner: Scanner,
+  ast: AstNode[],
+): readonly AstNode[] => {
   const token = scanner.scanValue()
   switch (token) {
     case TokenType.CurlyOpen:
@@ -86,10 +102,15 @@ export const parseValue = (scanner: Scanner, ast = []): readonly AstNode[] => {
       break
     case TokenType.Slash:
       ParseComment.parseComment(scanner, ast)
-      parseValue(scanner, ast)
+      parseValueInternal(scanner, ast)
       break
     default:
       break
   }
   return ast
+}
+
+export const parseValue = (scanner: Scanner): readonly AstNode[] => {
+  const ast: AstNode[] = []
+  return parseValueInternal(scanner, ast)
 }
