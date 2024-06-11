@@ -1,6 +1,6 @@
 import {
-  packageExtension,
   bundleJs,
+  packageExtension,
   replace,
 } from '@lvce-editor/package-extension'
 import fs, { readFileSync } from 'fs'
@@ -57,18 +57,18 @@ await replace({
   replacement: 'dist/jsonWorkerMain.js',
 })
 
-const getSchemaAbsoluteUriPath = path.join(
+const assetDirPath = path.join(
   root,
   'dist',
   'src',
   'parts',
-  'GetSchemaAbsoluteUri',
-  'GetSchemaAbsoluteUri.js',
+  'AssetDir',
+  'AssetDir.js',
 )
 await replace({
-  path: getSchemaAbsoluteUriPath,
-  occurrence: '../../../../schemas',
-  replacement: '../../../schemas',
+  path: assetDirPath,
+  occurrence: '../../../../',
+  replacement: '../../../',
 })
 
 await bundleJs(
