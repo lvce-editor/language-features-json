@@ -51,7 +51,7 @@ test('number', () => {
   ])
 })
 
-test.only('string', () => {
+test('string', () => {
   const text = '"hello"'
   expect(Jsonc.parse(text)).toEqual([
     {
@@ -63,7 +63,7 @@ test.only('string', () => {
   ])
 })
 
-test('empty array', () => {
+test.only('empty array', () => {
   const text = '[]'
   expect(Jsonc.parse(text)).toEqual([
     {
