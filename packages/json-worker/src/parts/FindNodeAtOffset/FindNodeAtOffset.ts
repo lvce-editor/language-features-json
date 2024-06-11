@@ -4,8 +4,9 @@ export const findNodeAtOffset = (
   nodes: readonly AstNode[],
   offset: number,
 ): AstNode | undefined => {
-  for (const node of nodes) {
-    if (node.offset + node.length >= offset) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const node = nodes[i]
+    if (node.offset >= offset) {
       return node
     }
   }
