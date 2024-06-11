@@ -5,6 +5,7 @@ import * as TokenType from '../TokenType/TokenType.ts'
 export const parseString = (scanner: Scanner): readonly AstNode[] => {
   scanner.goBack(1)
   const offset = scanner.getOffset()
+  scanner.scanString()
   const length = scanner.getOffset() - offset
   return [
     {
