@@ -1,12 +1,12 @@
 import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
-import * as QuoteString from '../QuoteString/QuoteString.ts'
 import * as FindNodeAtOffset from '../FindNodeAtOffset/FindNodeAtOffset.ts'
-import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as GetSchemaUri from '../GetSchemaUri/GetSchemaUri.ts'
+import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as Jsonc from '../Jsonc/Jsonc.ts'
-import * as TokenType from '../TokenType/TokenType.ts'
 import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
+import * as QuoteString from '../QuoteString/QuoteString.ts'
+import * as TokenType from '../TokenType/TokenType.ts'
 
 export const jsonCompletion = async (
   textDocument: any,
