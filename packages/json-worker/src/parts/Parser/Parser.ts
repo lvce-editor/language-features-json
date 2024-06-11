@@ -11,11 +11,19 @@ import * as ParserTokenType from '../TokenType/TokenType.ts'
 
 export const parseProperty = (scanner: Scanner): readonly AstNode[] => {
   scanner.goBack(1)
+  const offset = scanner.getOffset()
   const nodes: AstNode[] = []
   nodes.push(...ParsePropertyName.parsePropertyName(scanner))
   ParsePropertyColon.parsePropertyColon(scanner)
   const value = parseValueInternal(scanner)
   nodes.push(...value)
+  const length = scanner.getOffset() - offset
+  nodes.unshift({
+    type: ParserTokenType.Property,
+    offset,
+    length,
+    childCount: 2,
+  })
   return nodes
 }
 

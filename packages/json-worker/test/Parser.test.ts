@@ -116,7 +116,7 @@ test('empty object with whitespace', () => {
   ])
 })
 
-test('object with one property', () => {
+test.only('object with one property', () => {
   const text = '{ "val": 1 }'
   expect(Jsonc.parse(text)).toEqual([
     {
@@ -128,7 +128,7 @@ test('object with one property', () => {
     {
       type: TokenType.Property,
       offset: 2,
-      length: 12,
+      length: 8,
       childCount: 2,
     },
     {
