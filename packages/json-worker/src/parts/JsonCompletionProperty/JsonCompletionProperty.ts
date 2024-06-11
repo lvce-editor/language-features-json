@@ -6,6 +6,6 @@ export const jsonCompletionProperty = (
   schema: any,
   node: AstNode,
 ): readonly CompletionItem[] => {
-  const keys = Object.keys(schema.properties)
+  const keys = Object.keys(schema?.properties || {})
   return keys.map(PropertyKeyToCompletionOption.propertyKeyToCompletionOption)
 }
