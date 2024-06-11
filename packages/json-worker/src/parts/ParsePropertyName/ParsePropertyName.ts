@@ -7,7 +7,7 @@ export const parsePropertyName = (scanner: Scanner): readonly AstNode[] => {
   scanner.scanPropertyName()
   return [
     {
-      type: TokenType.Property,
+      type: TokenType.String,
       offset,
       length: scanner.getOffset() - offset,
       childCount: 0,
