@@ -20,7 +20,7 @@ export const jsonCompletion = (
   textDocument: any,
   offset: number,
 ): readonly CompletionItem[] => {
-  const text = textDocument.text
+  const { uri, text } = textDocument
   const parsed = Jsonc.parse(text)
   const node = FindNodeAtOffset.findNodeAtOffset(parsed, offset)
   if (!node) {
