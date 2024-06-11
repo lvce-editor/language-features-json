@@ -1,6 +1,6 @@
 import * as Literal from '../Literal/Literal.ts'
 
-export const parseLiteral = (scanner) => {
+export const parseLiteral = (scanner, ast) => {
   const rawValue = scanner.scanLiteral()
   switch (rawValue) {
     case Literal.True:

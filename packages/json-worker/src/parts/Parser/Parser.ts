@@ -22,15 +22,15 @@ const parseObject = (scanner, ast) => {
         scanner.goBack(1)
         const propertyName = ParsePropertyName.parsePropertyName(scanner)
         ParsePropertyColon.parsePropertyColon(scanner)
-        const value = parseValue(scanner)
+        const value = parseValue(scanner, ast)
         object[propertyName] = value
       case TokenType.Comma:
         break
       case TokenType.Slash:
-        ParseComment.parseComment(scanner)
+        ParseComment.parseComment(scanner, ast)
         break
       case TokenType.Literal:
-        ParseLiteral.parseLiteral(scanner)
+        ParseLiteral.parseLiteral(scanner, ast)
         break
       default:
         break
@@ -39,7 +39,7 @@ const parseObject = (scanner, ast) => {
   return object
 }
 
-const parseArray = (scanner) => {
+const parseArray = (scanner, ast) => {
   const array: any[] = []
   outer: while (true) {
     const token = scanner.scanValue()
@@ -63,23 +63,22 @@ const parseArray = (scanner) => {
   return array
 }
 
-export const parseValue = (scanner) => {
+export const parseValue = (scanner, ast = []) => {
   const token = scanner.scanValue()
-  const ast = []
   switch (token) {
     case TokenType.CurlyOpen:
       return parseObject(scanner, ast)
     case TokenType.DoubleQuote:
-      return ParseString.parseString(scanner)
+      return ParseString.parseString(scanner, ast)
     case TokenType.Numeric:
-      return ParseNumber.parseNumber(scanner)
+      return ParseNumber.parseNumber(scanner, ast)
     case TokenType.SquareOpen:
-      return parseArray(scanner)
+      return parseArray(scanner, ast)
     case TokenType.Literal:
-      return ParseLiteral.parseLiteral(scanner)
+      return ParseLiteral.parseLiteral(scanner, ast)
     case TokenType.Slash:
-      ParseComment.parseComment(scanner)
-      return parseValue(scanner)
+      ParseComment.parseComment(scanner, ast)
+      return parseValue(scanner, ast)
     default:
       return undefined
   }

@@ -2,7 +2,7 @@ import * as Jsonc from '../src/parts/Jsonc/Jsonc.ts'
 import * as TokenType from '../src/parts/TokenType/TokenType.ts'
 import { test, expect } from '@jest/globals'
 
-test('boolean - true', () => {
+test.only('boolean - true', () => {
   const text = 'true'
   expect(Jsonc.parse(text)).toEqual([
     {
