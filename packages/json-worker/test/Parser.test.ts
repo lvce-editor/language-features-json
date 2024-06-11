@@ -67,6 +67,36 @@ test('string', () => {
   ])
 })
 
+test('empty array', () => {
+  const text = '[]'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      type: TokenType.Array,
+      offset: 0,
+      length: 2,
+      childCount: 0,
+    },
+  ])
+})
+
+test('array with number', () => {
+  const text = '[ 1 ]'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      type: TokenType.Array,
+      offset: 0,
+      length: 5,
+      childCount: 1,
+    },
+    {
+      type: TokenType.Number,
+      offset: 2,
+      length: 1,
+      childCount: 0,
+    },
+  ])
+})
+
 test('empty object with whitespace', () => {
   const text = '{ }'
   expect(Jsonc.parse(text)).toEqual([
