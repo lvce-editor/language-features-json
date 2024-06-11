@@ -1,4 +1,4 @@
-const schemaBaseUri = '../../../../schema'
+const schemaBaseUri = '../../../../schemas'
 
 const getSchemaAbsoluteUrl = (schemaUri) => {
   const absoluteUrl = new URL(
