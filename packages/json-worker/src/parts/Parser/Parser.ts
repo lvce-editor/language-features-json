@@ -1,4 +1,4 @@
-import { AstNode } from '../AstNode/AstNode.ts'
+import type { AstNode } from '../AstNode/AstNode.ts'
 import * as TokenType from '../JsoncTokenType/JsoncTokenType.ts'
 import * as ParseComment from '../ParseComment/ParseComment.ts'
 import * as ParseLiteral from '../ParseLiteral/ParseLiteral.ts'
@@ -8,6 +8,16 @@ import * as ParsePropertyName from '../ParsePropertyName/ParsePropertyName.ts'
 import * as ParseString from '../ParseString/ParseString.ts'
 import type { Scanner } from '../Scanner/Scanner.ts'
 import * as ParserTokenType from '../TokenType/TokenType.ts'
+
+export const parseProperty = (scanner: Scanner): readonly AstNode[] => {
+  scanner.goBack(1)
+  const nodes: AstNode[] = []
+  nodes.push(...ParsePropertyName.parsePropertyName(scanner))
+  ParsePropertyColon.parsePropertyColon(scanner)
+  const value = parseValueInternal(scanner)
+  nodes.push(...value)
+  return nodes
+}
 
 const parseObject = (scanner: Scanner): readonly AstNode[] => {
   const nodes: AstNode[] = []
@@ -22,10 +32,8 @@ const parseObject = (scanner: Scanner): readonly AstNode[] => {
         break outer
       case TokenType.DoubleQuote:
         childCount++
-        scanner.goBack(1)
-        ParsePropertyName.parsePropertyName(scanner)
-        ParsePropertyColon.parsePropertyColon(scanner)
-        parseValueInternal(scanner)
+        const value = parseProperty(scanner)
+        nodes.push(...value)
       case TokenType.Comma:
         break
       case TokenType.Slash:
