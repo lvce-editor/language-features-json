@@ -75,8 +75,8 @@ const parseArray = (scanner: Scanner, ast: AstNode[]): void => {
         break
     }
   }
-  node.childCount = array.length
-  node.length = scanner.getOffset() - node.offset
+  // node.childCount = array.length
+  // node.length = scanner.getOffset() - node.offset
 }
 
 export const parseValueInternal = (
@@ -92,7 +92,7 @@ export const parseValueInternal = (
       ParseString.parseString(scanner, ast)
       break
     case TokenType.Numeric:
-      ParseNumber.parseNumber(scanner, ast)
+      ParseNumber.parseNumber(scanner)
       break
     case TokenType.SquareOpen:
       parseArray(scanner, ast)
