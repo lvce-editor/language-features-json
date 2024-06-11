@@ -13,7 +13,6 @@
   },
   "keywords": [],
   "author": "",
-  "type": "module",
   "devDependencies": {
     "@lerna/legacy-package-management": "^8.1.4",
     "@lvce-editor/package-extension": "^1.0.0",
