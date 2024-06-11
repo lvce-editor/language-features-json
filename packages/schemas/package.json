@@ -1,0 +1,11 @@
+{
+  "name": "@lvce-editor/json-schemas",
+  "version": "0.0.0-dev",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": ""
+}
