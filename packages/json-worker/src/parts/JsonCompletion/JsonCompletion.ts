@@ -1,3 +1,4 @@
+import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
 import * as CompletionType from '../CompletionType/CompletionType.ts'
 import * as FindNodeAtOffset from '../FindNodeAtOffset/FindNodeAtOffset.ts'
 import * as Jsonc from '../Jsonc/Jsonc.ts'
