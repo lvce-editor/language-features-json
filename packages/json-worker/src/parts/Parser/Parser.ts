@@ -1,3 +1,4 @@
+import { AstNode } from '../AstNode/AstNode.ts'
 import * as TokenType from '../JsoncTokenType/JsoncTokenType.ts'
 import * as ParseComment from '../ParseComment/ParseComment.ts'
 import * as ParseLiteral from '../ParseLiteral/ParseLiteral.ts'
@@ -5,6 +6,7 @@ import * as ParseNumber from '../ParseNumber/ParseNumber.ts'
 import * as ParsePropertyColon from '../ParsePropertyColon/ParsePropertyColon.ts'
 import * as ParsePropertyName from '../ParsePropertyName/ParsePropertyName.ts'
 import * as ParseString from '../ParseString/ParseString.ts'
+import { Scanner } from '../Scanner/Scanner.ts'
 import * as ParserTokenType from '../TokenType/TokenType.ts'
 
 const parseObject = (scanner, ast) => {
@@ -64,23 +66,30 @@ const parseArray = (scanner, ast) => {
   return array
 }
 
-export const parseValue = (scanner, ast = []) => {
+export const parseValue = (scanner: Scanner, ast = []): readonly AstNode[] => {
   const token = scanner.scanValue()
   switch (token) {
     case TokenType.CurlyOpen:
-      return parseObject(scanner, ast)
+      parseObject(scanner, ast)
+      break
     case TokenType.DoubleQuote:
-      return ParseString.parseString(scanner, ast)
+      ParseString.parseString(scanner, ast)
+      break
     case TokenType.Numeric:
-      return ParseNumber.parseNumber(scanner, ast)
+      ParseNumber.parseNumber(scanner, ast)
+      break
     case TokenType.SquareOpen:
-      return parseArray(scanner, ast)
+      parseArray(scanner, ast)
+      break
     case TokenType.Literal:
-      return ParseLiteral.parseLiteral(scanner, ast)
+      ParseLiteral.parseLiteral(scanner, ast)
+      break
     case TokenType.Slash:
       ParseComment.parseComment(scanner, ast)
-      return parseValue(scanner, ast)
+      parseValue(scanner, ast)
+      break
     default:
-      return undefined
+      break
   }
+  return ast
 }
