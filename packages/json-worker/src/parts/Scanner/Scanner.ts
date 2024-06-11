@@ -5,7 +5,7 @@ export interface Scanner {
   readonly scanString: () => void
   readonly goBack: (delta: number) => void
   readonly scanLiteral: () => any
-  readonly scanNumber: () => string
+  readonly scanNumber: () => void
   readonly scanComment: () => void
   readonly getOffset: () => number
 }
