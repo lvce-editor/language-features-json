@@ -46,6 +46,7 @@ const parseObject = (scanner: Scanner): readonly AstNode[] => {
 const parseArray = (scanner: Scanner): readonly AstNode[] => {
   const nodes: AstNode[] = []
   const offset = scanner.getOffset() - 1
+  let childCount = 0
   outer: while (true) {
     const token = scanner.scanValue()
     switch (token) {
@@ -56,12 +57,13 @@ const parseArray = (scanner: Scanner): readonly AstNode[] => {
       case TokenType.Slash:
         scanner.scanComment()
         break
+      case TokenType.Comma:
+        break
       default:
+        childCount++
         scanner.goBack(1)
         const value = parseValueInternal(scanner)
         nodes.push(...value)
-        break
-      case TokenType.Comma:
         break
     }
   }
@@ -70,7 +72,7 @@ const parseArray = (scanner: Scanner): readonly AstNode[] => {
     type: ParserTokenType.Array,
     offset,
     length,
-    childCount: 0,
+    childCount,
   })
   return nodes
 }
