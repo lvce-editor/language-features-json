@@ -1,3 +1,3 @@
-export const parseComment = (scanner, ast) => {
+export const parseComment = (scanner) => {
   scanner.scanComment()
 }
