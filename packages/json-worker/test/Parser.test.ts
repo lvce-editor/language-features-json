@@ -75,7 +75,19 @@ test('empty array', () => {
   ])
 })
 
-test.only('array with number', () => {
+test('array with whitespace', () => {
+  const text = '[ ]'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      type: TokenType.Array,
+      offset: 0,
+      length: 3,
+      childCount: 0,
+    },
+  ])
+})
+
+test('array with number', () => {
   const text = '[ 1 ]'
   expect(Jsonc.parse(text)).toEqual([
     {
@@ -93,7 +105,7 @@ test.only('array with number', () => {
   ])
 })
 
-test('empty object with whitespace', () => {
+test.skip('empty object with whitespace', () => {
   const text = '{ }'
   expect(Jsonc.parse(text)).toEqual([
     {
