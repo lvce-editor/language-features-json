@@ -104,7 +104,7 @@ test('array with number', () => {
   ])
 })
 
-test.skip('empty object with whitespace', () => {
+test('empty object with whitespace', () => {
   const text = '{ }'
   expect(Jsonc.parse(text)).toEqual([
     {

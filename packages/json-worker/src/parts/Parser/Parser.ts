@@ -10,10 +10,9 @@ import type { Scanner } from '../Scanner/Scanner.ts'
 import * as ParserTokenType from '../TokenType/TokenType.ts'
 
 const parseObject = (scanner: Scanner): readonly AstNode[] => {
-  // ast.push({
-  //   type: ParserTokenType.Object,
-  // })
-  const object = {}
+  const nodes: AstNode[] = []
+  let childCount = 0
+  const offset = scanner.getOffset() - 1
   outer: while (true) {
     const token = scanner.scanValue()
     switch (token) {
@@ -22,11 +21,11 @@ const parseObject = (scanner: Scanner): readonly AstNode[] => {
       case TokenType.CurlyClose:
         break outer
       case TokenType.DoubleQuote:
+        childCount++
         scanner.goBack(1)
-        const propertyName = ParsePropertyName.parsePropertyName(scanner)
+        ParsePropertyName.parsePropertyName(scanner)
         ParsePropertyColon.parsePropertyColon(scanner)
-        const value = parseValueInternal(scanner)
-        object[propertyName] = value
+        parseValueInternal(scanner)
       case TokenType.Comma:
         break
       case TokenType.Slash:
@@ -39,8 +38,13 @@ const parseObject = (scanner: Scanner): readonly AstNode[] => {
         break
     }
   }
-  return []
-  // return object
+  nodes.unshift({
+    type: ParserTokenType.Object,
+    offset,
+    length: scanner.getOffset() - offset,
+    childCount,
+  })
+  return nodes
 }
 
 const parseArray = (scanner: Scanner): readonly AstNode[] => {
