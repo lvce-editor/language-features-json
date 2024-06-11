@@ -57,6 +57,20 @@ await replace({
   replacement: 'dist/jsonWorkerMain.js',
 })
 
+const getSchemaAbsoluteUriPath = path.join(
+  root,
+  'dist',
+  'src',
+  'parts',
+  'GetSchemaAbsoluteUri',
+  'GetSchemaAbsoluteUri.js',
+)
+await replace({
+  path: getSchemaAbsoluteUriPath,
+  occurrence: '../../../../schemas',
+  replacement: '../../../schemas',
+})
+
 await bundleJs(
   join(root, 'dist', 'json-worker', 'src', 'jsonWorkerMain.ts'),
   join(root, 'dist', 'json-worker', 'dist', 'jsonWorkerMain.js'),
