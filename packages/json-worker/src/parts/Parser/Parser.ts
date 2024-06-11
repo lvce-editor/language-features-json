@@ -1,3 +1,4 @@
+import { AstNode } from '../AstNode/AstNode.ts'
 import * as TokenType from '../JsoncTokenType/JsoncTokenType.ts'
 import * as ParseComment from '../ParseComment/ParseComment.ts'
 import * as ParseLiteral from '../ParseLiteral/ParseLiteral.ts'
@@ -5,8 +6,13 @@ import * as ParseNumber from '../ParseNumber/ParseNumber.ts'
 import * as ParsePropertyColon from '../ParsePropertyColon/ParsePropertyColon.ts'
 import * as ParsePropertyName from '../ParsePropertyName/ParsePropertyName.ts'
 import * as ParseString from '../ParseString/ParseString.ts'
+import type { Scanner } from '../Scanner/Scanner.ts'
+import * as ParserTokenType from '../TokenType/TokenType.ts'
 
-const parseObject = (scanner) => {
+const parseObject = (scanner: Scanner): readonly AstNode[] => {
+  // ast.push({
+  //   type: ParserTokenType.Object,
+  // })
   const object = {}
   outer: while (true) {
     const token = scanner.scanValue()
@@ -19,7 +25,7 @@ const parseObject = (scanner) => {
         scanner.goBack(1)
         const propertyName = ParsePropertyName.parsePropertyName(scanner)
         ParsePropertyColon.parsePropertyColon(scanner)
-        const value = parseValue(scanner)
+        const value = parseValueInternal(scanner)
         object[propertyName] = value
       case TokenType.Comma:
         break
@@ -33,11 +39,14 @@ const parseObject = (scanner) => {
         break
     }
   }
-  return object
+  return []
+  // return object
 }
 
-const parseArray = (scanner) => {
-  const array: any[] = []
+const parseArray = (scanner: Scanner): readonly AstNode[] => {
+  const nodes: AstNode[] = []
+  const offset = scanner.getOffset() - 1
+  let childCount = 0
   outer: while (true) {
     const token = scanner.scanValue()
     switch (token) {
@@ -48,19 +57,27 @@ const parseArray = (scanner) => {
       case TokenType.Slash:
         scanner.scanComment()
         break
-      default:
-        scanner.goBack(1)
-        const value = parseValue(scanner)
-        array.push(value)
-        break
       case TokenType.Comma:
+        break
+      default:
+        childCount++
+        scanner.goBack(1)
+        const value = parseValueInternal(scanner)
+        nodes.push(...value)
         break
     }
   }
-  return array
+  const length = scanner.getOffset() - offset
+  nodes.unshift({
+    type: ParserTokenType.Array,
+    offset,
+    length,
+    childCount,
+  })
+  return nodes
 }
 
-export const parseValue = (scanner) => {
+export const parseValueInternal = (scanner: Scanner): readonly AstNode[] => {
   const token = scanner.scanValue()
   switch (token) {
     case TokenType.CurlyOpen:
@@ -75,8 +92,12 @@ export const parseValue = (scanner) => {
       return ParseLiteral.parseLiteral(scanner)
     case TokenType.Slash:
       ParseComment.parseComment(scanner)
-      return parseValue(scanner)
+      return parseValueInternal(scanner)
     default:
-      return undefined
+      return []
   }
+}
+
+export const parseValue = (scanner: Scanner): readonly AstNode[] => {
+  return parseValueInternal(scanner)
 }

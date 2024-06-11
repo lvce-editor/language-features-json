@@ -11,14 +11,17 @@ const schema = {
   },
 }
 
+const enumToCompletionOption = (value) => {
+  return {
+    kind: CompletionType.Value,
+    label: value,
+  }
+}
+
 export const jsonCompletion = (textDocument, offset) => {
   const text = textDocument.text
   const parsed = Jsonc.parse(text)
   console.log({ parsed, text })
-  return [
-    {
-      kind: CompletionType.Value,
-      label: 'module',
-    },
-  ]
+  const options = schema.properties.type.enum
+  return options.map(enumToCompletionOption)
 }

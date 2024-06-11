@@ -1,15 +1,39 @@
+import type { AstNode } from '../AstNode/AstNode.ts'
 import * as Literal from '../Literal/Literal.ts'
+import type { Scanner } from '../Scanner/Scanner.ts'
+import * as TokenType from '../TokenType/TokenType.ts'
 
-export const parseLiteral = (scanner) => {
+export const parseLiteral = (scanner: Scanner): readonly AstNode[] => {
   const rawValue = scanner.scanLiteral()
   switch (rawValue) {
     case Literal.True:
-      return true
+      return [
+        {
+          type: TokenType.Boolean,
+          offset: 0,
+          length: rawValue.length,
+          childCount: 0,
+        },
+      ]
     case Literal.False:
-      return false
+      return [
+        {
+          type: TokenType.Boolean,
+          offset: 0,
+          length: rawValue.length,
+          childCount: 0,
+        },
+      ]
     case Literal.Null:
-      return null
+      return [
+        {
+          type: TokenType.Null,
+          offset: 0,
+          length: rawValue.length,
+          childCount: 0,
+        },
+      ]
     default:
-      return undefined
+      return []
   }
 }
