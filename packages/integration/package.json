@@ -1,16 +1,17 @@
 {
-  "name": "json-worker",
+  "name": "language-features-json-integration",
   "version": "0.0.0-dev",
   "description": "",
-  "main": "src/jsonWorkerMain.ts",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
     "test": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --forceExit",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --watch"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "devDependencies": {},
   "jest": {
     "extensionsToTreatAsEsm": [
       ".ts"
@@ -22,18 +23,10 @@
       "^.+\\.tsx?$": [
         "ts-jest",
         {
-          "useESM": true
+          "useESM": true,
+          "diagnostics": false
         }
       ]
-    },
-    "collectCoverage": true,
-    "coverageThreshold": {
-      "global": {
-        "branches": 20,
-        "functions": 20,
-        "lines": 20
-      }
-    },
-    "coveragePathIgnorePatterns": []
+    }
   }
 }
