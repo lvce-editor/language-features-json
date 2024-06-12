@@ -49,6 +49,18 @@ const updateFileMap = (oldFileMap) => {
 }
 updateJson(fileMapPath, updateFileMap)
 
+const webExtensionsPath = join(
+  root,
+  'dist',
+  commitHash,
+  'config',
+  'webExtensions.json',
+)
+const updateWebExtensions = (oldFile) => {
+  return [{ ...oldFile[0], browser: 'dist/languageFeaturesJsonMain.js' }]
+}
+
+updateJson(webExtensionsPath, updateWebExtensions)
 const fileJsonPath = join(
   root,
   'dist',
