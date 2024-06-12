@@ -5,6 +5,7 @@
     { "path": "./packages/build" },
     { "path": "./packages/e2e" },
     { "path": "./packages/extension" },
-    { "path": "./packages/json-worker" }
+    { "path": "./packages/json-worker" },
+    { "path": "./packages/integration" }
   ]
 }
