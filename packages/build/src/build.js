@@ -22,6 +22,7 @@ delete packageJson.xo
 delete packageJson.jest
 delete packageJson.prettier
 delete packageJson.devDependencies
+packageExtension.main = 'dist/languageFeaturesJsonMain.js'
 
 fs.writeFileSync(
   join(root, 'dist', 'package.json'),
@@ -68,13 +69,26 @@ const assetDirPath = path.join(
 await replace({
   path: assetDirPath,
   occurrence: '../../../../',
-  replacement: '../../../',
+  replacement: '../',
 })
+
+await bundleJs(
+  join(root, 'dist', 'src', 'languageFeaturesJsonMain.js'),
+  join(root, 'dist', 'dist', 'languageFeaturesJsonMain.js'),
+)
 
 await bundleJs(
   join(root, 'dist', 'json-worker', 'src', 'jsonWorkerMain.ts'),
   join(root, 'dist', 'json-worker', 'dist', 'jsonWorkerMain.js'),
 )
+
+const extensionJsonPath = join(root, 'dist', 'extension.json')
+
+await replace({
+  path: extensionJsonPath,
+  occurrence: 'src/languageFeaturesJsonMain.js',
+  replacement: 'dist/languageFeaturesJsonMain.js',
+})
 
 await packageExtension({
   highestCompression: true,
