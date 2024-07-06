@@ -1,5 +1,6 @@
 import * as SelectionProvider from '../SelectionProvider/SelectionProvider.js'
 import * as CompletionProvider from '../CompletionProvider/CompletionProvider.js'
+import * as HoverProvider from '../HoverProvider/HoverProvider.js'
 
 export const register = () => {
   // @ts-ignore
@@ -9,4 +10,6 @@ export const register = () => {
   })
   // @ts-ignore
   vscode.registerCompletionProvider(CompletionProvider)
+  // @ts-ignore
+  vscode.registerHoverProvider(HoverProvider)
 }
