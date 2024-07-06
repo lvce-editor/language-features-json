@@ -1,10 +1,7 @@
 import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
-import * as FindNodeAtOffset from '../FindNodeAtOffset/FindNodeAtOffset.ts'
-import * as GetSchemaUri from '../GetSchemaUri/GetSchemaUri.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
-import * as Jsonc from '../Jsonc/Jsonc.ts'
-import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
+import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as QuoteString from '../QuoteString/QuoteString.ts'
 import * as TokenType from '../TokenType/TokenType.ts'
 
@@ -12,14 +9,14 @@ export const jsonCompletion = async (
   textDocument: any,
   offset: number,
 ): Promise<readonly CompletionItem[]> => {
-  const { uri, text } = textDocument
-  const parsed = Jsonc.parse(text)
-  const node = FindNodeAtOffset.findNodeAtOffset(parsed, offset)
-  if (!node) {
+  const parsed = await PrepareJsonDocument.prepareJsonDocument(
+    textDocument,
+    offset,
+  )
+  if (parsed === PrepareJsonDocument.emptyDocument) {
     return []
   }
-  const schemaUri = await GetSchemaUri.getSchemaUri(uri)
-  const schema = await LoadSchema.loadSchema(schemaUri)
+  const { node, schema } = parsed
   if (node.type === TokenType.String) {
     const options = schema?.properties?.type?.enum || []
     return options.map(EnumToCompletionOption.enumToCompletionOption)
