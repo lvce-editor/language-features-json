@@ -5,7 +5,8 @@
   "activation": [
     "onLanguage:json",
     "onCompletion:json",
-    "onTabCompletion:json"
+    "onTabCompletion:json",
+    "onHover:json"
   ],
   "browser": "src/languageFeaturesJsonMain.js",
   "icon": "./icon.png",
