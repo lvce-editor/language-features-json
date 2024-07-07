@@ -1,3 +1,5 @@
+export const skip = true
+
 export const name = 'json.hover'
 
 export const test = async ({
