@@ -6,8 +6,8 @@ export const findNodeAtOffset = (
 ): AstNode | undefined => {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]
-    if (node.offset < offset) {
-      return nodes[i + 1]
+    if (node.offset <= offset) {
+      return nodes[i]
     }
   }
   return nodes.at(-1)

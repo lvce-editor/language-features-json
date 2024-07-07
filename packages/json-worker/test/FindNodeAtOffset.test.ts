@@ -39,8 +39,8 @@ test('property name', () => {
   const offset = 5
   expect(FindNodeAtOffset.findNodeAtOffset(nodes, offset)).toEqual({
     childCount: 0,
-    length: 1,
-    offset: 9,
-    type: 3,
+    length: 5,
+    offset: 2,
+    type: 4,
   })
 })
