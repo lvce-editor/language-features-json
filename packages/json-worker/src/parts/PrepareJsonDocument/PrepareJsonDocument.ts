@@ -1,8 +1,7 @@
 import { AstNode } from '../AstNode/AstNode.ts'
 import * as FindNodeAtOffset from '../FindNodeAtOffset/FindNodeAtOffset.ts'
-import * as GetSchemaUri from '../GetSchemaUri/GetSchemaUri.ts'
+import * as GetSchema from '../GetSchema/GetSchema.ts'
 import * as Jsonc from '../Jsonc/Jsonc.ts'
-import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
 
 export interface ParseJsonDocument {
   readonly schema: any
@@ -29,8 +28,7 @@ export const prepareJsonDocument = async (
   if (!node) {
     return emptyDocument
   }
-  const schemaUri = await GetSchemaUri.getSchemaUri(uri)
-  const schema = await LoadSchema.loadSchema(schemaUri)
+  const schema = await GetSchema.getSchema(uri)
   return {
     schema,
     node,
