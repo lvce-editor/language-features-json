@@ -2,7 +2,6 @@ import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument
 import * as TokenType from '../TokenType/TokenType.ts'
 
 export const getHover = async (textDocument, offset) => {
-  console.time('prepare')
   const parsed = await PrepareJsonDocument.prepareJsonDocument(
     textDocument,
     offset,
@@ -10,8 +9,6 @@ export const getHover = async (textDocument, offset) => {
   if (parsed === PrepareJsonDocument.emptyDocument) {
     return undefined
   }
-  console.timeEnd('prepare')
-
   const { schema, node } = parsed
   if (node.type === TokenType.String) {
     const text = textDocument.text.slice(
