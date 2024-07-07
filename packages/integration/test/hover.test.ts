@@ -19,7 +19,7 @@ test('hover', async () => {
   const worker = await testWorker({
     execMap,
   })
-  const offset = 10
+  const offset = 7
   const textDocument = {
     uri: 'test://test.json',
     text: `{ "type": "module" }`,
