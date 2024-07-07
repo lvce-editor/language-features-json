@@ -11,8 +11,8 @@ export const getHover = async (textDocument, offset) => {
   }
   const { schema, node } = parsed
   if (node.type === TokenType.String) {
-    const displayString = schema?.properties?.type?.description || ''
-    const documentation = ''
+    const displayString = ''
+    const documentation = schema?.properties?.type?.description || ''
     return {
       displayString,
       documentation,
