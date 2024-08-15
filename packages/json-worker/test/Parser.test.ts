@@ -145,3 +145,57 @@ test('object with one property', () => {
     },
   ])
 })
+
+test('nested arrays', () => {
+  const text = '[[], []]'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      childCount: 2,
+      length: 8,
+      offset: 0,
+      type: 2,
+    },
+    {
+      childCount: 0,
+      length: 2,
+      offset: 1,
+      type: 2,
+    },
+    {
+      childCount: 0,
+      length: 2,
+      offset: 5,
+      type: 2,
+    },
+  ])
+})
+
+test('array inside object', () => {
+  const text = '{"a": []}'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      childCount: 1,
+      length: 9,
+      offset: 0,
+      type: 1,
+    },
+    {
+      childCount: 2,
+      length: 7,
+      offset: 1,
+      type: 6,
+    },
+    {
+      childCount: 0,
+      length: 3,
+      offset: 1,
+      type: 4,
+    },
+    {
+      childCount: 0,
+      length: 2,
+      offset: 6,
+      type: 2,
+    },
+  ])
+})
