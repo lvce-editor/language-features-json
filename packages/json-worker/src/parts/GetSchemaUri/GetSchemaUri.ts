@@ -7,5 +7,8 @@ export const getSchemaUri = async (uri: string) => {
   ) {
     return 'src/package.schema.json'
   }
+  if (uri.endsWith('tsconfig.json')) {
+    return 'src/tsconfig.schema.json'
+  }
   return ''
 }
