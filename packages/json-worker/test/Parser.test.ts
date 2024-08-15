@@ -199,3 +199,57 @@ test('array inside object', () => {
     },
   ])
 })
+
+test('object and array inside object', () => {
+  const text = '{"a": {}, "b": ["."]}'
+  expect(Jsonc.parse(text)).toEqual([
+    {
+      childCount: 2,
+      length: 21,
+      offset: 0,
+      type: 1,
+    },
+    {
+      childCount: 2,
+      length: 7,
+      offset: 1,
+      type: 6,
+    },
+    {
+      childCount: 0,
+      length: 3,
+      offset: 1,
+      type: 4,
+    },
+    {
+      childCount: 0,
+      length: 2,
+      offset: 6,
+      type: 1,
+    },
+    {
+      childCount: 2,
+      length: 10,
+      offset: 10,
+      type: 6,
+    },
+    {
+      childCount: 0,
+      length: 3,
+      offset: 10,
+      type: 4,
+    },
+    {
+      childCount: 1,
+      length: 5,
+      offset: 15,
+      type: 2,
+    },
+    {
+      childCount: 0,
+      length: 3,
+      offset: 16,
+      type: 4,
+    },
+  ])
+})
