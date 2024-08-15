@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals'
 import * as GetSchemaUri from '../src/parts/GetSchemaUri/GetSchemaUri.ts'
 
-test('tsconfig', () => {
+test('tsconfig', async () => {
   const uri = '/test/tsconfig.json'
-  expect(GetSchemaUri.getSchemaUri(uri)).toBe('src/tsconfig.schema.json')
+  expect(await GetSchemaUri.getSchemaUri(uri)).toBe('src/tsconfig.schema.json')
 })
