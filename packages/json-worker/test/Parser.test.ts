@@ -153,19 +153,19 @@ test('nested arrays', () => {
       childCount: 2,
       length: 8,
       offset: 0,
-      type: 2,
+      type: TokenType.Array,
     },
     {
       childCount: 0,
       length: 2,
       offset: 1,
-      type: 2,
+      type: TokenType.Array,
     },
     {
       childCount: 0,
       length: 2,
       offset: 5,
-      type: 2,
+      type: TokenType.Array,
     },
   ])
 })
@@ -177,25 +177,25 @@ test('array inside object', () => {
       childCount: 1,
       length: 9,
       offset: 0,
-      type: 1,
+      type: TokenType.Object,
     },
     {
       childCount: 2,
       length: 7,
       offset: 1,
-      type: 6,
+      type: TokenType.Property,
     },
     {
       childCount: 0,
       length: 3,
       offset: 1,
-      type: 4,
+      type: TokenType.String,
     },
     {
       childCount: 0,
       length: 2,
       offset: 6,
-      type: 2,
+      type: TokenType.Array,
     },
   ])
 })
