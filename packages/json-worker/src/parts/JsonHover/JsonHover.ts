@@ -1,6 +1,8 @@
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as TokenType from '../TokenType/TokenType.ts'
 
+const definitionPrefix = '#/definitions/'
+
 export const getHover = async (textDocument, offset) => {
   const parsed = await PrepareJsonDocument.prepareJsonDocument(
     textDocument,
@@ -16,6 +18,21 @@ export const getHover = async (textDocument, offset) => {
       node.offset + node.length - 1,
     )
     const displayString = ''
+    if (schema.allOf && Array.isArray(schema.allOf)) {
+      for (const item of schema.allOf) {
+        if (item.$ref) {
+          const resolved =
+            schema.definitions[item.$ref.slice(definitionPrefix.length)]
+          const documentation = resolved?.properties?.[text]?.description || ''
+          if (documentation) {
+            return {
+              displayString,
+              documentation,
+            }
+          }
+        }
+      }
+    }
     const documentation = schema?.properties?.[text]?.description || ''
     return {
       displayString,
