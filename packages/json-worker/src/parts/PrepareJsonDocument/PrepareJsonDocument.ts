@@ -3,7 +3,7 @@ import * as FindNodeAtOffset from '../FindNodeAtOffset/FindNodeAtOffset.ts'
 import * as GetSchema from '../GetSchema/GetSchema.ts'
 import * as Jsonc from '../Jsonc/Jsonc.ts'
 
-export interface ParseJsonDocument {
+interface ParseJsonDocument {
   readonly schema: any
   readonly node: AstNode
 }
