@@ -9,7 +9,7 @@ import * as ParseString from '../ParseString/ParseString.ts'
 import type { Scanner } from '../Scanner/Scanner.ts'
 import * as ParserTokenType from '../TokenType/TokenType.ts'
 
-export const parseProperty = (scanner: Scanner): readonly AstNode[] => {
+const parseProperty = (scanner: Scanner): readonly AstNode[] => {
   scanner.goBack(1)
   const offset = scanner.getOffset()
   const nodes: AstNode[] = []
@@ -97,7 +97,7 @@ const parseArray = (scanner: Scanner): readonly AstNode[] => {
   return nodes
 }
 
-export const parseValueInternal = (scanner: Scanner): readonly AstNode[] => {
+const parseValueInternal = (scanner: Scanner): readonly AstNode[] => {
   const token = scanner.scanValue()
   switch (token) {
     case TokenType.CurlyOpen:
