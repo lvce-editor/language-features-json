@@ -29,3 +29,43 @@ test('hover', async () => {
     documentation: 'test description',
   })
 })
+
+test('with definitions', async () => {
+  const execMap = {
+    'Json.loadSchema'() {
+      return {
+        allOf: [
+          {
+            $ref: '#/definitions/compilerOptionsDefinition',
+          },
+        ],
+        definitions: {
+          compilerOptionsDefinition: {
+            properties: {
+              compilerOptions: {
+                type: 'object',
+                description:
+                  'Instructs the TypeScript compiler how to compile .ts files.',
+                properties: {},
+              },
+            },
+          },
+        },
+        type: 'object',
+      }
+    },
+  }
+  const worker = await testWorker({
+    execMap,
+  })
+  const offset = 7
+  const textDocument = {
+    uri: 'test://tsconfig.json',
+    text: `{ "compilerOptions": {} }`,
+  }
+  expect(await worker.execute('Hover.getHover', textDocument, offset)).toEqual({
+    displayString: '',
+    documentation:
+      'Instructs the TypeScript compiler how to compile .ts files.',
+  })
+})
