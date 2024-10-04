@@ -1,8 +1,11 @@
-import * as GetOrCreateWorker from '../GetOrCreateWorker/GetOrCreateWorker.js'
-import * as LaunchJsonWorker from '../LaunchJsonWorker/LaunchJsonWorker.js'
+import * as Command from '../Command/Command.js'
 
-const { invoke } = GetOrCreateWorker.getOrCreateWorker(
-  LaunchJsonWorker.launchJsonWorker
-)
+// @ts-ignore
+const rpc = vscode.createRpc({
+  id: 'builtin.language-features-json.json-worker',
+  execute: Command.execute,
+})
 
-export { invoke }
+export const invoke = (method, ...params) => {
+  return rpc.invoke(method, ...params)
+}
