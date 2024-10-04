@@ -11,6 +11,15 @@
   "browser": "src/languageFeaturesJsonMain.js",
   "icon": "./icon.png",
   "commands": [],
+  "rpc": [
+    {
+      "id": "builtin.language-features-json.json-worker",
+      "type": "web-worker",
+      "name": "Json Worker",
+      "url": "../json-worker/dist/jsonWorkerMain.js",
+      "contentSecurityPolicy": ["default-src 'none'"]
+    }
+  ],
   "languages": [
     {
       "id": "json",
