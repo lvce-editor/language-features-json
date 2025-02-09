@@ -1,11 +1,8 @@
 import * as JsonWorkerUrl from '../JsonWorkerUrl/JsonWorkerUrl.js'
 import * as LoadSchema from '../LoadSchema/LoadSchema.js'
 
-const execute = (method, ...params) => {
-  if (method === 'Json.loadSchema') {
-    return LoadSchema.loadSchema(...params)
-  }
-  return {}
+const commandMap = {
+  'Json.loadSchema': LoadSchema.loadSchema,
 }
 
 export const launchJsonWorker = async () => {
@@ -13,7 +10,7 @@ export const launchJsonWorker = async () => {
   const rpc = await vscode.createRpc({
     url: JsonWorkerUrl.jsonWorkerUrl,
     name: 'Json Worker',
-    execute,
+    commandMap,
   })
   return rpc
 }
