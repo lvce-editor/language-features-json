@@ -1,7 +1,8 @@
 import { jest, test, expect } from '@jest/globals'
 import * as JsonCompletionProperty from '../src/parts/JsonCompletionProperty/JsonCompletionProperty.ts'
+import * as CompletionType from '../src/parts/CompletionType/CompletionType.ts'
 
-test.skip('handles schema references', () => {
+test('handles schema references', () => {
   const schema = {
     allOf: [
       {
@@ -34,7 +35,7 @@ test.skip('handles schema references', () => {
   const result = JsonCompletionProperty.jsonCompletionProperty(schema, node)
   expect(result).toEqual([
     {
-      kind: 10,
+      kind: CompletionType.Property,
       label: 'compilerOptions',
     },
   ])
