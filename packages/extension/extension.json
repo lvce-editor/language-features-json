@@ -17,13 +17,18 @@
       "type": "web-worker",
       "name": "Json Worker",
       "url": "../json-worker/dist/jsonWorkerMain.js",
-      "contentSecurityPolicy": ["default-src 'none'"]
+      "contentSecurityPolicy": [
+        "default-src 'none'"
+      ]
     }
   ],
   "languages": [
     {
       "id": "json",
-      "extensions": [".json"]
+      "extensions": [
+        ".json"
+      ]
     }
-  ]
+  ],
+  "repository": "https://github.com/lvce-editor/language-features-json"
 }
