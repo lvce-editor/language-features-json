@@ -5,6 +5,7 @@
     "module": "esnext",
     "target": "esnext",
     "types": ["node", "jest"],
+    "ignoreDeprecations": "6.0",
     "moduleResolution": "node",
     "skipLibCheck": true,
     "noEmit": true,

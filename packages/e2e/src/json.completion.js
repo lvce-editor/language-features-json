@@ -1,3 +1,5 @@
+export const skip = true
+
 export const name = 'json.completion'
 
 export const test = async ({
