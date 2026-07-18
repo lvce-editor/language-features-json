@@ -9,7 +9,10 @@ const root = path.join(__dirname, '..')
 const REPO = 'https://github.com/SchemaStore/schemastore'
 const COMMIT = '93796f920ccb0efa89b6972bb577eda2f9dbd443'
 
-const schemasToCopy = ['tsconfig.json', 'package.json']
+const schemasToCopy = [
+  ['tsconfig.json', 'tsconfig.schema.json'],
+  ['package.json', 'package.schema.json'],
+]
 
 const main = async () => {
   process.chdir(root)
@@ -20,11 +23,11 @@ const main = async () => {
   process.chdir(`${root}/.tmp/schemastore`)
   await execaCommand(`git checkout ${COMMIT}`)
   process.chdir(root)
-  await mkdir(`${root}/packages/json-worker/data`, { recursive: true })
-  for (const schema of schemasToCopy) {
+  await mkdir(`${root}/packages/schemas/src`, { recursive: true })
+  for (const [source, target] of schemasToCopy) {
     await cp(
-      `${root}/.tmp/schemastore/src/schemas/json/${schema}`,
-      `${root}/packages/json-worker/data/${schema}`
+      `${root}/.tmp/schemastore/src/schemas/json/${source}`,
+      `${root}/packages/schemas/src/${target}`,
     )
   }
 }

@@ -4,7 +4,7 @@ import { cp, readdir } from 'node:fs/promises'
 import path, { join } from 'node:path'
 import { root } from './root.js'
 
-await import('./build.js')
+await Promise.all([import('./build.js'), import('./build-extension.js')])
 
 await cp(path.join(root, 'dist'), path.join(root, 'dist2'), {
   recursive: true,

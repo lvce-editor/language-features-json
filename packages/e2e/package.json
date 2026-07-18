@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "e2e": "test-with-playwright --only-extension=../extension --test-path=.",
-    "e2e:headless": "test-with-playwright --only-extension=../extension --test-path=. --headless"
+    "build:extension": "node ../build/src/build-extension.js",
+    "e2e": "npm run build:extension && test-with-playwright --only-extension=../extension --test-path=.",
+    "e2e:headless": "npm run build:extension && test-with-playwright --only-extension=../extension --test-path=. --headless"
   },
   "type": "module",
   "keywords": [],

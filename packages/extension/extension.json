@@ -8,26 +8,26 @@
     "onTabCompletion:json",
     "onHover:json"
   ],
-  "browser": "src/languageFeaturesJsonMain.js",
+  "browser": "dist/languageFeaturesJsonMain.js",
+  "isolated": true,
   "icon": "./icon.png",
   "commands": [],
-  "rpc": [
+  "completionProviders": [
     {
-      "id": "builtin.language-features-json.json-worker",
-      "type": "web-worker",
-      "name": "Json Worker",
-      "url": "../json-worker/dist/jsonWorkerMain.js",
-      "contentSecurityPolicy": [
-        "default-src 'none'"
-      ]
+      "id": "json.provideCompletions.json",
+      "languageId": "json"
+    }
+  ],
+  "hoverProviders": [
+    {
+      "id": "json.provideHover.json",
+      "languageId": "json"
     }
   ],
   "languages": [
     {
       "id": "json",
-      "extensions": [
-        ".json"
-      ]
+      "extensions": [".json"]
     }
   ],
   "repository": "https://github.com/lvce-editor/language-features-json"

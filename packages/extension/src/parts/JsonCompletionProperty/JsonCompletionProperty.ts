@@ -1,5 +1,5 @@
 import { AstNode } from '../AstNode/AstNode.ts'
-import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
+import type { CompletionItem } from '@lvce-editor/api'
 import * as PropertyKeyToCompletionOption from '../PropertyKeyToCompletionOption/PropertyKeyToCompletionOption.ts'
 import * as ResolveSchemaRef from '../ResolveSchemaRef/ResolveSchemaRef.ts'
 import type { JsonSchema } from '../JsonSchema/JsonSchema.ts'
