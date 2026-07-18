@@ -8,6 +8,6 @@
   "author": "",
   "type": "module",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^30.4.2"
   }
 }
