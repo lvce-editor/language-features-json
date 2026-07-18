@@ -2,12 +2,39 @@
   "name": "builtin.language-features-json",
   "version": "0.0.0-dev",
   "description": "",
-  "main": "src/languageFeaturesjsonMain.js",
-  "scripts": {},
+  "main": "dist/languageFeaturesJsonMain.js",
+  "scripts": {
+    "test": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --forceExit"
+  },
   "keywords": [],
   "author": "",
   "type": "module",
+  "jest": {
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
+    },
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0
+      }
+    },
+    "coveragePathIgnorePatterns": []
+  },
   "devDependencies": {
-    "jest": "^29.7.0"
+    "@lvce-editor/api": "^8.53.1"
   }
 }

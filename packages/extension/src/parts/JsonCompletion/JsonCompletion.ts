@@ -1,4 +1,4 @@
-import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
+import type { CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'

@@ -1,4 +1,4 @@
-import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
+import type { CompletionItem } from '@lvce-editor/api'
 import * as CompletionType from '../CompletionType/CompletionType.ts'
 
 export const enumToCompletionOption = (value: string): CompletionItem => {
