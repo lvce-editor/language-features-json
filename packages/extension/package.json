@@ -36,5 +36,8 @@
   },
   "devDependencies": {
     "@lvce-editor/api": "^8.53.1"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
   }
 }

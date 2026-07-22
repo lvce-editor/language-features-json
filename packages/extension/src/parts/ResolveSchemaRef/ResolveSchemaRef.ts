@@ -1,18 +1,33 @@
 import type { JsonSchema } from '../JsonSchema/JsonSchema.ts'
 
-const definitionPrefix = '#/definitions/'
-
 export const resolveSchemaRef = (
   schema: JsonSchema,
   ref: string,
 ): JsonSchema => {
-  if (!ref.startsWith(definitionPrefix)) {
+  if (!ref.startsWith('#/')) {
     return {}
   }
-  const path = ref.slice(definitionPrefix.length)
-  const resolved = schema.definitions?.[path]
-  if (!resolved) {
-    return {}
+  const segments = ref
+    .slice(2)
+    .split('/')
+    .map((segment) => segment.replaceAll('~1', '/').replaceAll('~0', '~'))
+  const candidates = [
+    schema,
+    ...(schema.allOf || []),
+    ...(schema.anyOf || []),
+    ...(schema.oneOf || []),
+  ]
+  for (const candidate of candidates) {
+    let current: any = candidate
+    for (const segment of segments) {
+      current = current?.[segment]
+      if (!current) {
+        break
+      }
+    }
+    if (current) {
+      return current
+    }
   }
-  return resolved
+  return {}
 }

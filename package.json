@@ -20,7 +20,7 @@
   "type": "module",
   "devDependencies": {
     "@lvce-editor/eslint-config": "^17.0.3",
-    "@lvce-editor/server": "0.70.27",
+    "@lvce-editor/server": "0.93.3",
     "@types/node": "^25.0.9",
     "eslint": "^10.7.0",
     "jest": "^30.2.0",

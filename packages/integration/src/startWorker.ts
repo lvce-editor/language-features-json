@@ -19,12 +19,26 @@ const getModuleUrl = (name: string): string => {
 }
 
 export const startWorker = async () => {
+  const JsonSchemaContributions = await import(
+    getModuleUrl('JsonSchemaContributions')
+  )
+  await JsonSchemaContributions.initialize()
   const JsonCompletion = await import(getModuleUrl('JsonCompletion'))
+  const JsonDiagnostic = await import(getModuleUrl('JsonDiagnostic'))
+  const GetSchema = await import(getModuleUrl('GetSchema'))
   const JsonHover = await import(getModuleUrl('JsonHover'))
   const Selection = await import(getModuleUrl('Selection'))
   const commandMap = {
     'Completion.getCompletion': JsonCompletion.jsonCompletion,
     'Completion.resolve': JsonCompletion.resolve,
+    async 'Diagnostic.getDiagnostics'(textDocument: any) {
+      const schema = await GetSchema.getSchema(textDocument.uri)
+      return JsonDiagnostic.getDiagnostics(
+        textDocument.text,
+        textDocument.uri,
+        schema,
+      )
+    },
     'Hover.getHover': JsonHover.getHover,
     'Selection.expand': Selection.expand,
   }

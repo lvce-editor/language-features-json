@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:extension": "node ../build/src/build-extension.js",
-    "e2e": "npm run build:extension && test-with-playwright --only-extension=../extension --test-path=.",
-    "e2e:headless": "npm run build:extension && test-with-playwright --only-extension=../extension --test-path=. --headless"
+    "build:extension": "node scripts/build-extension.js && node scripts/prepare-extension.js",
+    "e2e": "npm run build:extension && test-with-playwright --only-extension=.tmp/extension --test-path=.",
+    "e2e:headless": "npm run build:extension && test-with-playwright --only-extension=.tmp/extension --test-path=. --headless"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@lvce-editor/test-with-playwright": "^2.11.0"
+    "@lvce-editor/test-with-playwright": "^22.10.0"
   }
 }
