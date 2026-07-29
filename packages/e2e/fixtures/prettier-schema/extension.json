@@ -1,0 +1,13 @@
+{
+  "id": "test.prettier-schema",
+  "name": "Prettier Schema Fixture",
+  "description": "Contributes package.json validation for e2e tests",
+  "version": "0.0.0",
+  "browser": "src/extensionMain.js",
+  "jsonValidation": [
+    {
+      "fileMatch": "package.json",
+      "url": "./schemas/package.schema.json"
+    }
+  ]
+}

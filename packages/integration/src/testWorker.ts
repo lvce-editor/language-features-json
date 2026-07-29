@@ -2,8 +2,24 @@
 // send and receive messages
 
 import { startWorker } from './startWorker.ts'
+import { jest } from '@jest/globals'
 
-export const testWorker = async ({ execMap }) => {
+let currentJsonSchemas: readonly unknown[] = []
+
+jest.unstable_mockModule('@lvce-editor/api', () => ({
+  getJsonSchemas: async () => currentJsonSchemas,
+}))
+
+interface TestWorkerOptions {
+  readonly execMap: Record<string, (...args: any[]) => any>
+  readonly jsonSchemas?: readonly any[]
+}
+
+export const testWorker = async ({
+  execMap,
+  jsonSchemas = [],
+}: TestWorkerOptions) => {
+  currentJsonSchemas = jsonSchemas
   const invocations: any[][] = []
   const worker = await startWorker()
   return {

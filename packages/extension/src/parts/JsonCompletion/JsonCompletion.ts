@@ -1,31 +1,34 @@
 import type { CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
+import * as GetCompletionContext from '../GetCompletionContext/GetCompletionContext.ts'
+import * as GetSchema from '../GetSchema/GetSchema.ts'
+import * as GetSchemaAtPath from '../GetSchemaAtPath/GetSchemaAtPath.ts'
+import * as GetSchemaEnum from '../GetSchemaEnum/GetSchemaEnum.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
-import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as QuoteString from '../QuoteString/QuoteString.ts'
-import * as TokenType from '../TokenType/TokenType.ts'
 
 export const jsonCompletion = async (
   textDocument: any,
   offset: number,
 ): Promise<readonly CompletionItem[]> => {
-  const parsed = await PrepareJsonDocument.prepareJsonDocument(
-    textDocument,
+  const context = GetCompletionContext.getCompletionContext(
+    textDocument.text,
     offset,
   )
-  if (parsed === PrepareJsonDocument.emptyDocument) {
+  if (!context) {
     return []
   }
-  const { node, schema } = parsed
-
-  if (node.type === TokenType.String) {
-    const options = schema?.properties?.type?.enum || []
+  const schema = await GetSchema.getSchema(textDocument.uri)
+  const schemaAtPath = GetSchemaAtPath.getSchemaAtPath(schema, context.path)
+  if (context.kind === 'value') {
+    const options = GetSchemaEnum.getSchemaEnum(schema, schemaAtPath)
     return options.map(EnumToCompletionOption.enumToCompletionOption)
   }
-  if (node.type === TokenType.Object) {
-    return JsonCompletionProperty.jsonCompletionProperty(schema, node)
-  }
-  return []
+  return JsonCompletionProperty.jsonCompletionProperty(
+    schema,
+    { childCount: 0, length: 0, offset, type: 1 },
+    schemaAtPath,
+  )
 }
 
 export const resolve = (textDocument, offset, name, completionItem) => {

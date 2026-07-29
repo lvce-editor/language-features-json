@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "prettier": {
+      "type": "object",
+      "properties": {
+        "semi": {
+          "type": "boolean"
+        },
+        "printWidth": {
+          "type": "integer"
+        },
+        "trailingComma": {
+          "type": "string",
+          "enum": ["all", "es5", "none"]
+        }
+      }
+    }
+  }
+}
