@@ -11,7 +11,3 @@ export const has = (uri) => {
 export const set = (uri, schema) => {
   schemas[uri] = schema
 }
-
-export const clear = () => {
-  throw new Error('not implemented')
-}
