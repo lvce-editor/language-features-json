@@ -1,0 +1,36 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.js"],
+      "project": ["scripts/*.js"],
+      "ignoreDependencies": ["@lvce-editor/server"]
+    },
+    "packages/build": {
+      "entry": [
+        "src/build-extension.js",
+        "src/build.js",
+        "src/build-static.js",
+        "src/computeNodeModulesCacheKey.js",
+        "src/dev.js"
+      ],
+      "project": ["src/**/*.js"]
+    },
+    "packages/e2e": {
+      "entry": ["src/**/*.js"],
+      "project": ["src/**/*.js"]
+    },
+    "packages/extension": {
+      "entry": ["src/languageFeaturesJsonMain.ts", "test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/integration": {
+      "entry": ["test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/schemas": {
+      "entry": ["test/**/*.test.ts"],
+      "project": ["test/**/*.ts"]
+    }
+  }
+}
