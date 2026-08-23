@@ -1,5 +1,6 @@
 export interface JsonSchema {
   readonly $ref?: string
+  readonly default?: unknown
   readonly properties?: {
     readonly [key: string]: JsonSchema
   }
@@ -11,4 +12,6 @@ export interface JsonSchema {
   readonly description?: string
   readonly type?: string
   readonly enum?: readonly string[]
+  readonly maximum?: number
+  readonly minimum?: number
 }
