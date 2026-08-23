@@ -20,7 +20,8 @@
   "author": "",
   "type": "module",
   "devDependencies": {
-    "@lvce-editor/server": "0.103.19",
+    "@lvce-editor/server": "0.108.10",
+    "@lvce-editor/static-server": "0.108.10",
     "@types/node": "^25.0.9",
     "execa": "^9.6.1",
     "jest": "^30.2.0",
