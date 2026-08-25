@@ -11,6 +11,7 @@ export const test: Test = async ({ Command, Editor, expect, Locator }) => {
   const completions = Locator('#Completions')
   await expect(completions).toBeVisible()
   const completionItems = completions.locator('.EditorCompletionItem')
-  await expect(completionItems.nth(0)).toHaveText('editor.fontSize')
-  await expect(completionItems.nth(1)).toHaveText('editor.fontFamily')
+  await expect(completionItems.nth(0)).toHaveText(
+    'gptvoice.tools.terminal.enabled',
+  )
 }

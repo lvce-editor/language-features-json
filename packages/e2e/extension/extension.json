@@ -1,0 +1,39 @@
+{
+  "id": "builtin.language-features-json",
+  "name": "Language Features json",
+  "description": "Provides rich language support for JSON files during end-to-end tests",
+  "activation": [
+    "onLanguage:json",
+    "onCompletion:json",
+    "onTabCompletion:json",
+    "onHover:json"
+  ],
+  "browser": "dist/languageFeaturesJsonMain.js",
+  "isolated": true,
+  "commands": [],
+  "completionProviders": [
+    {
+      "id": "json.provideCompletions.json",
+      "languageId": "json"
+    }
+  ],
+  "configuration": {
+    "gptvoice.tools.terminal.enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allow Gpt Voice to execute Bash commands in the opened workspace."
+    }
+  },
+  "hoverProviders": [
+    {
+      "id": "json.provideHover.json",
+      "languageId": "json"
+    }
+  ],
+  "languages": [
+    {
+      "id": "json",
+      "extensions": [".json"]
+    }
+  ]
+}

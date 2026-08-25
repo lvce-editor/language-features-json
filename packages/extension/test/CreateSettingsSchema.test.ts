@@ -3,48 +3,58 @@ import * as CreateSettingsSchema from '../src/parts/CreateSettingsSchema/CreateS
 
 test('creates a schema from distributed settings contributions', () => {
   expect(
-    CreateSettingsSchema.createSettingsSchema([
+    CreateSettingsSchema.createSettingsSchema(
       [
-        {
-          description: 'The font family of the editor',
-          id: 'editor.fontFamily',
-          type: 2,
-          value: 'Fira Code',
-        },
-        {
-          description: 'The font size of the editor',
-          id: 'editor.fontSize',
-          maximum: 100,
-          minimum: 10,
-          type: 5,
-          value: 15,
-        },
-        {
-          description: 'Controls how lines should wrap',
-          id: 'editor.wordWrap',
-          options: [
-            { id: 'editor.on', label: 'On' },
-            { id: 'editor.off', label: 'Off' },
-          ],
-          type: 1,
-          value: 'off',
-        },
-        {
-          description: 'Controls editor rulers',
-          id: 'editor.rulers',
-          type: 4,
-          value: [],
-        },
+        [
+          {
+            description: 'The font family of the editor',
+            id: 'editor.fontFamily',
+            type: 2,
+            value: 'Fira Code',
+          },
+          {
+            description: 'The font size of the editor',
+            id: 'editor.fontSize',
+            maximum: 100,
+            minimum: 10,
+            type: 5,
+            value: 15,
+          },
+          {
+            description: 'Controls how lines should wrap',
+            id: 'editor.wordWrap',
+            options: [
+              { id: 'editor.on', label: 'On' },
+              { id: 'editor.off', label: 'Off' },
+            ],
+            type: 1,
+            value: 'off',
+          },
+          {
+            description: 'Controls editor rulers',
+            id: 'editor.rulers',
+            type: 4,
+            value: [],
+          },
+        ],
+        [
+          {
+            description: 'Configures excluded files',
+            id: 'files.exclude',
+            type: 4,
+            value: { '**/.git': true },
+          },
+        ],
       ],
-      [
-        {
-          description: 'Configures excluded files',
-          id: 'files.exclude',
-          type: 4,
-          value: { '**/.git': true },
+      {
+        'gptvoice.tools.terminal.enabled': {
+          default: false,
+          description:
+            'Allow Gpt Voice to execute Bash commands in the opened workspace.',
+          type: 'boolean',
         },
-      ],
-    ]),
+      },
+    ),
   ).toEqual({
     properties: {
       'editor.fontFamily': {
@@ -86,6 +96,12 @@ test('creates a schema from distributed settings contributions', () => {
         maximum: undefined,
         minimum: undefined,
         type: 'object',
+      },
+      'gptvoice.tools.terminal.enabled': {
+        default: false,
+        description:
+          'Allow Gpt Voice to execute Bash commands in the opened workspace.',
+        type: 'boolean',
       },
     },
     type: 'object',

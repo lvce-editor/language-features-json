@@ -47,6 +47,7 @@ const createPropertySchema = (setting: SettingItem): JsonSchema => {
 
 export const createSettingsSchema = (
   contributions: readonly (readonly SettingItem[])[],
+  extensionDefinitions: Readonly<Record<string, JsonSchema>> = {},
 ): JsonSchema => {
   const properties: Record<string, JsonSchema> = {}
   for (const contribution of contributions) {
@@ -55,7 +56,10 @@ export const createSettingsSchema = (
     }
   }
   return {
-    properties,
+    properties: {
+      ...extensionDefinitions,
+      ...properties,
+    },
     type: 'object',
   }
 }
