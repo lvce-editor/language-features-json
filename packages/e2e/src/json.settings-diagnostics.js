@@ -35,7 +35,7 @@ export const test = async ({
       endRowIndex: 2,
       message: 'Unknown setting "gptvoice.tools.terminal.enable".',
       rowIndex: 2,
-      source: 'json',
+      source: 'json (settings_validation)',
       type: 'warning',
     },
   ]

@@ -21,7 +21,7 @@ test('returns a warning for an unknown setting', () => {
       endRowIndex: 1,
       message: 'Unknown setting "editor.fontSiz".',
       rowIndex: 1,
-      source: 'json',
+      source: 'json (settings_validation)',
       type: 'warning',
     },
   ])
