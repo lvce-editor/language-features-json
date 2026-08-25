@@ -5,6 +5,7 @@
   "activation": [
     "onLanguage:json",
     "onCompletion:json",
+    "onDiagnostic:json",
     "onTabCompletion:json",
     "onHover:json"
   ],
@@ -15,6 +16,12 @@
   "completionProviders": [
     {
       "id": "json.provideCompletions.json",
+      "languageId": "json"
+    }
+  ],
+  "diagnosticProviders": [
+    {
+      "id": "json.provideDiagnostics.json",
       "languageId": "json"
     }
   ],
