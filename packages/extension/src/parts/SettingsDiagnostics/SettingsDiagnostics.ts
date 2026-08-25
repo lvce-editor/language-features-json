@@ -65,7 +65,7 @@ const createUnknownSettingDiagnostic = (
     endColumnIndex: end.columnIndex,
     endRowIndex: end.rowIndex,
     message: `Unknown setting ${JSON.stringify(propertyName)}.`,
-    source: 'json',
+    source: 'json (settings_validation)',
     type: 'warning',
   }
 }
