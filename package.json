@@ -20,13 +20,13 @@
   "author": "",
   "type": "module",
   "devDependencies": {
-    "@lvce-editor/server": "0.108.10",
-    "@lvce-editor/static-server": "0.108.10",
-    "@types/node": "^25.0.9",
-    "execa": "^9.6.1",
-    "jest": "^30.2.0",
-    "knip": "^6.29.0",
-    "ts-jest": "^29.4.11",
+    "@lvce-editor/server": "0.110.3",
+    "@lvce-editor/static-server": "0.110.3",
+    "@types/node": "^26.4.0",
+    "execa": "^10.0.1",
+    "jest": "^30.4.2",
+    "knip": "^6.32.3",
+    "ts-jest": "^29.4.12",
     "typescript": "^6.0.0"
   },
   "prettier": {
