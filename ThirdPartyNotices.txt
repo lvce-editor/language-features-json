@@ -2,7 +2,7 @@ This project incorporates components from the projects listed below, that may ha
 differing from this project:
 
 
-1) License Notice for packages/json-worker/data/tsconfig.json (from https://github.com/SchemaStore/schemastore)
+1) License Notice for packages/schemas/src/tsconfig.schema.json (from https://github.com/SchemaStore/schemastore)
 ---------------------------------------
 
                                  Apache License

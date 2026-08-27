@@ -2,28 +2,31 @@
   "name": "builtin.language-features-json-monorepo",
   "version": "0.0.0-dev",
   "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "postinstall": "lerna bootstrap --ci",
-    "test": "lerna run test",
-    "dev": "node ./node_modules/@lvce-editor/server/bin/server.js --only-extension=packages/extension --test-path=packages/e2e",
+    "build": "node packages/build/src/build.js",
+    "build:extension": "node packages/build/src/build-extension.js",
+    "test": "npm test --workspaces --if-present",
+    "dev": "node packages/build/src/dev.js",
     "type-check": "tsc -b",
     "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
-    "e2e": "cd packages/e2e && npm run e2e",
-    "e2e:headless": "cd packages/e2e && npm run e2e:headless"
+    "e2e": "npm run e2e --workspace=packages/e2e",
+    "e2e:headless": "npm run e2e:headless --workspace=packages/e2e",
+    "lint": "knip --no-config-hints"
   },
   "keywords": [],
   "author": "",
   "type": "module",
   "devDependencies": {
-    "@lerna/legacy-package-management": "^8.2.4",
-    "@lvce-editor/eslint-config": "^16.5.0",
-    "@lvce-editor/server": "0.91.21",
-    "@types/node": "^26.1.1",
-    "eslint": "^10.7.0",
+    "@lvce-editor/server": "0.110.3",
+    "@lvce-editor/static-server": "0.110.3",
+    "@types/node": "^26.4.0",
+    "execa": "^10.0.1",
     "jest": "^30.4.2",
-    "lerna": "^8.2.2",
-    "prettier": "^3.9.5",
-    "ts-jest": "^29.4.11",
+    "knip": "^6.32.3",
+    "ts-jest": "^29.4.12",
     "typescript": "^6.0.0"
   },
   "prettier": {

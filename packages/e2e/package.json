@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "e2e": "node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=../extension --test-path=.",
-    "e2e:headless": "node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js  --only-extension=../extension --test-path=. --headless"
+    "build:extension": "node ../build/src/build-extension.js && node ../build/src/build-e2e-extension.js",
+    "e2e": "npm run build:extension && test-with-playwright --only-extension=./extension --test-path=.",
+    "e2e:headless": "npm run build:extension && test-with-playwright --only-extension=./extension --test-path=. --headless"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@lvce-editor/test-with-playwright": "^22.8.1"
+    "@lvce-editor/test-with-playwright": "^22.24.0"
   }
 }

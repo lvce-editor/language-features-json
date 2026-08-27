@@ -4,22 +4,28 @@
 import { startWorker } from './startWorker.ts'
 
 export const testWorker = async ({ execMap }) => {
-  const invocations = []
-  const rpc = {
-    invoke(...args) {
-      // @ts-ignore
-      invocations.push(args)
-      if (execMap[args[0]]) {
-        return execMap[args[0]](...args.slice(1))
-      }
-      throw new Error(`unknown command ${args[0]}`)
-    },
-  }
-  const worker = await startWorker(rpc)
+  const invocations: any[][] = []
+  const worker = await startWorker()
   return {
-    execute(...args) {
-      // @ts-ignore
-      return worker.execute(...args)
+    async execute(commandId: string, ...args: any[]) {
+      const originalFetch = globalThis.fetch
+      globalThis.fetch = async (input): Promise<Response> => {
+        invocations.push(['Json.loadSchema', input])
+        const loadSchema = execMap['Json.loadSchema']
+        if (!loadSchema) {
+          throw new Error('unknown command Json.loadSchema')
+        }
+        return {
+          json: async () => loadSchema(input),
+          ok: true,
+          statusText: '',
+        } as Response
+      }
+      try {
+        return await worker.execute(commandId, ...args)
+      } finally {
+        globalThis.fetch = originalFetch
+      }
     },
     invocations,
   }
