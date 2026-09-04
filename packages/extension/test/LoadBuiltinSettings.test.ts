@@ -62,3 +62,28 @@ test('resolves built-in settings next to the current LVCE static bundle', () => 
     ),
   ).toBe('https://example.com/static/commit/builtin-settings/')
 })
+
+test('uses bundled settings when runtime settings are unavailable', async () => {
+  globalThis.fetch = jest.fn(async () => {
+    return {
+      ok: false,
+      statusText: 'Not Found',
+    } as Response
+  })
+  const fallback = [
+    [
+      {
+        id: 'editor.fontSize',
+        type: 5,
+        value: 15,
+      },
+    ],
+  ]
+
+  await expect(
+    LoadBuiltinSettings.loadBuiltinSettings(
+      'https://example.com/builtin-settings/',
+      fallback,
+    ),
+  ).resolves.toBe(fallback)
+})

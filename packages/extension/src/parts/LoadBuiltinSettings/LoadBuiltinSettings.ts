@@ -1,6 +1,11 @@
 import * as AssetDir from '../AssetDir/AssetDir.ts'
 import type { SettingItem } from '../SettingItem/SettingItem.ts'
 
+declare const BUILTIN_SETTINGS: readonly (readonly SettingItem[])[] | undefined
+
+const bundledSettings =
+  typeof BUILTIN_SETTINGS === 'undefined' ? undefined : BUILTIN_SETTINGS
+
 const loadJson = async <T>(url: string): Promise<T> => {
   const response = await fetch(url)
   if (!response.ok) {
@@ -17,15 +22,23 @@ export const getBuiltinSettingsBaseUrl = (
 
 export const loadBuiltinSettings = async (
   baseUrl: string = getBuiltinSettingsBaseUrl(),
+  fallback: readonly (readonly SettingItem[])[] | undefined = bundledSettings,
 ): Promise<readonly (readonly SettingItem[])[]> => {
-  const fileNames = await loadJson<readonly string[]>(
-    new URL('index.json', baseUrl).toString(),
-  )
-  return Promise.all(
-    fileNames.map((fileName) =>
-      loadJson<readonly SettingItem[]>(
-        new URL(fileName, baseUrl).toString(),
+  try {
+    const fileNames = await loadJson<readonly string[]>(
+      new URL('index.json', baseUrl).toString(),
+    )
+    return Promise.all(
+      fileNames.map((fileName) =>
+        loadJson<readonly SettingItem[]>(
+          new URL(fileName, baseUrl).toString(),
+        ),
       ),
-    ),
-  )
+    )
+  } catch (error) {
+    if (fallback) {
+      return fallback
+    }
+    throw error
+  }
 }
