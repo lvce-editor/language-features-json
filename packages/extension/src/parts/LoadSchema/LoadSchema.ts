@@ -12,7 +12,7 @@ export const loadSchema = async (schemaUri: string): Promise<unknown> => {
   }
   const absoluteUrl = GetSchemaAbsoluteUri.getSchemaAbsoluteUrl(schemaUri)
   const protocol = new URL(absoluteUrl).protocol
-  if (!['blob:', 'data:', 'http:', 'https:'].includes(protocol)) {
+  if (protocol === 'live-component-state:') {
     return JSON.parse(await readFile(absoluteUrl))
   }
   const response = await fetch(absoluteUrl)

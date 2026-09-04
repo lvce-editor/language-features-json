@@ -4,9 +4,10 @@ import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
 
 export const getSchema = async (uri: string, text = ''): Promise<any> => {
   const schemaUri = await GetSchemaUri.getSchemaUri(uri, text)
-  if (!CachedSchema.has(schemaUri)) {
+  const cacheKey = `${uri}\0${schemaUri}`
+  if (!CachedSchema.has(cacheKey)) {
     const schema = await LoadSchema.loadSchema(schemaUri)
-    CachedSchema.set(schemaUri, schema)
+    CachedSchema.set(cacheKey, schema)
   }
-  return CachedSchema.get(schemaUri)
+  return CachedSchema.get(cacheKey)
 }
