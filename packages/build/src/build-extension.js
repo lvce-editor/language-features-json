@@ -1,7 +1,6 @@
 import * as esbuild from 'esbuild'
 import fs from 'node:fs'
 import path from 'node:path'
-import { loadBuiltinSettings } from './loadBuiltinSettings.js'
 import { root } from './root.js'
 
 const extension = path.join(root, 'packages', 'extension')
@@ -16,7 +15,6 @@ await esbuild.build({
   bundle: true,
   define: {
     ASSET_PATH_PREFIX: JSON.stringify('../../'),
-    BUILTIN_SETTINGS: JSON.stringify(loadBuiltinSettings()),
   },
   entryPoints: [entryPoint],
   external: ['electron', 'node:*'],
