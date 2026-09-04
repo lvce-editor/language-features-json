@@ -1,4 +1,4 @@
-import { executeCommand } from '@lvce-editor/api'
+import { readFile } from '@lvce-editor/api'
 import * as GetSchemaAbsoluteUri from '../GetSchemaAbsoluteUri/GetSchemaAbsoluteUri.ts'
 import * as GetSchemaUri from '../GetSchemaUri/GetSchemaUri.ts'
 import * as LoadSettingsSchema from '../LoadSettingsSchema/LoadSettingsSchema.ts'
@@ -13,7 +13,7 @@ export const loadSchema = async (schemaUri: string): Promise<unknown> => {
   const absoluteUrl = GetSchemaAbsoluteUri.getSchemaAbsoluteUrl(schemaUri)
   const protocol = new URL(absoluteUrl).protocol
   if (protocol === 'live-component-state:') {
-    const content = await executeCommand('FileSystem.readFile', absoluteUrl)
+    const content = await readFile(absoluteUrl)
     if (typeof content !== 'string') {
       throw new TypeError(
         `Expected schema content to be a string, got ${typeof content}`,
