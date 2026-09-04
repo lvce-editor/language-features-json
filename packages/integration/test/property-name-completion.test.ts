@@ -1,7 +1,7 @@
 import { testWorker } from '../src/testWorker.ts'
 import { test, expect } from '@jest/globals'
 
-test.skip('property-name-completion', async () => {
+test('property-name-completion', async () => {
   const execMap = {
     'Json.loadSchema'() {
       return {
@@ -10,6 +10,10 @@ test.skip('property-name-completion', async () => {
           type: {
             type: 'string',
             enum: ['commonjs', 'module'],
+          },
+          enabled: {
+            default: true,
+            type: 'boolean',
           },
         },
       }
@@ -27,8 +31,14 @@ test.skip('property-name-completion', async () => {
     await worker.execute('Completion.getCompletion', textDocument, offset),
   ).toEqual([
     {
-      kind: 2,
+      kind: 1,
       label: 'type',
+      snippet: '"type": "commonjs"',
+    },
+    {
+      kind: 1,
+      label: 'enabled',
+      snippet: '"enabled": true',
     },
   ])
 })

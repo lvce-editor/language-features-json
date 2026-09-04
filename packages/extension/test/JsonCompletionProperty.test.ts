@@ -37,6 +37,7 @@ test('handles schema references', () => {
     {
       kind: CompletionType.Property,
       label: 'compilerOptions',
+      snippet: '"compilerOptions": ',
     },
   ])
 })
