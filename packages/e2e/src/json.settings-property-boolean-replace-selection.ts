@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'json.settings-property-completion'
+export const name = 'json.settings-property-boolean-replace-selection'
 
 export const test: Test = async ({
   Editor,
@@ -18,7 +18,9 @@ export const test: Test = async ({
 
   await Editor.openCompletion()
   await EditorCompletion.selectIndex(1)
-
-  await Editor.shouldHaveText('{"editor.cache": true}')
   await Editor.shouldHaveSelections(new Uint32Array([0, 17, 0, 21]))
+  await Editor.type('false')
+
+  await Editor.shouldHaveText('{"editor.cache": false}')
+  await Editor.shouldHaveSelections(new Uint32Array([0, 22, 0, 22]))
 }

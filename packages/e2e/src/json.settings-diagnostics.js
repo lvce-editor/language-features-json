@@ -1,5 +1,19 @@
 export const name = 'json.settings-diagnostics'
 
+const waitFor = async (assertion) => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await assertion()
+      return
+    } catch (error) {
+      if (attempt === 99) {
+        throw error
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50))
+    }
+  }
+}
+
 export const test = async ({
   FileSystem,
   Workspace,
@@ -39,7 +53,7 @@ export const test = async ({
       type: 'warning',
     },
   ]
-  await Editor.shouldHaveDiagnostics(expectedDiagnostics)
+  await waitFor(() => Editor.shouldHaveDiagnostics(expectedDiagnostics))
 
   const diagnosticWarning = Locator('.DiagnosticWarning')
   const diagnosticError = Locator('.DiagnosticError')

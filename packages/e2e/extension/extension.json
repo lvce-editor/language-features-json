@@ -40,6 +40,21 @@
       "enum": ["newTab", "externalBrowser"],
       "default": "newTab",
       "description": "Controls where external links are opened."
+    },
+    "test.boolean.false": {
+      "type": "boolean",
+      "default": false,
+      "description": "A boolean setting with a false default for completion tests."
+    },
+    "test.number": {
+      "type": "number",
+      "default": 42,
+      "description": "A number setting for completion tests."
+    },
+    "test.string": {
+      "type": "string",
+      "default": "value",
+      "description": "A string setting for completion tests."
     }
   },
   "hoverProviders": [
