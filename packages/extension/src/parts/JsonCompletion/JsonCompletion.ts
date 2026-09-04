@@ -1,5 +1,6 @@
 import type { CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
+import * as GetCompletionSelectionRange from '../GetCompletionSelectionRange/GetCompletionSelectionRange.ts'
 import * as GetPropertySchemaAtOffset from '../GetPropertySchemaAtOffset/GetPropertySchemaAtOffset.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
@@ -38,11 +39,19 @@ export const jsonCompletion = async (
 }
 
 export const resolve = (textDocument, offset, name, completionItem) => {
+  const snippet =
+    typeof completionItem.snippet === 'string'
+      ? completionItem.snippet
+      : QuoteString.quoteString(name)
+  const selectionRange =
+    GetCompletionSelectionRange.getCompletionSelectionRange(
+      completionItem.kind,
+      name,
+      snippet,
+    )
   return {
     ...completionItem,
-    snippet:
-      typeof completionItem.snippet === 'string'
-        ? completionItem.snippet
-        : QuoteString.quoteString(name),
+    snippet,
+    ...(selectionRange && { selectionRange }),
   }
 }

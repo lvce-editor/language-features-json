@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'json.settings-enum-completion'
+export const name = 'json.settings-enum-external-browser-completion'
 
 export const test: Test = async ({
   Editor,
@@ -23,10 +23,10 @@ export const test: Test = async ({
   const items = Locator('.EditorCompletionItem')
   await expect(items.nth(0)).toHaveText('newTab')
   await expect(items.nth(1)).toHaveText('externalBrowser')
-  await EditorCompletion.selectIndex(0)
+  await EditorCompletion.selectIndex(1)
 
   await Editor.shouldHaveText(
-    '{"simpleBrowser.openExternalLinks": "newTab"}',
+    '{"simpleBrowser.openExternalLinks": "externalBrowser"}',
   )
-  await Editor.shouldHaveSelections(new Uint32Array([0, 44, 0, 44]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 53, 0, 53]))
 }

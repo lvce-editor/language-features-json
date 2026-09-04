@@ -96,3 +96,52 @@ test('resolve preserves the JSON insertion text', async () => {
     ),
   ).resolves.toEqual(completionItem)
 })
+
+test.each([
+  ['boolean', 'enabled', '"enabled": true', 11, 15],
+  ['enum', 'mode', '"mode": "first"', 8, 15],
+  ['number', 'count', '"count": 42', 9, 11],
+  ['string', 'name', '"name": "value"', 8, 15],
+])(
+  'resolve adds the %s property default selection',
+  async (_type, label, snippet, startOffset, endOffset) => {
+    const worker = await testWorker({ execMap: {} })
+    const completionItem = {
+      kind: 1,
+      label,
+      snippet,
+    }
+
+    await expect(
+      worker.execute(
+        'Completion.resolve',
+        { uri: 'test://resolve-property.json', text: '{}' },
+        1,
+        label,
+        completionItem,
+      ),
+    ).resolves.toEqual({
+      ...completionItem,
+      selectionRange: { endOffset, startOffset },
+    })
+  },
+)
+
+test('resolve leaves a property without a default unselected', async () => {
+  const worker = await testWorker({ execMap: {} })
+  const completionItem = {
+    kind: 1,
+    label: 'name',
+    snippet: '"name": ',
+  }
+
+  await expect(
+    worker.execute(
+      'Completion.resolve',
+      { uri: 'test://resolve-property.json', text: '{}' },
+      1,
+      'name',
+      completionItem,
+    ),
+  ).resolves.toEqual(completionItem)
+})
