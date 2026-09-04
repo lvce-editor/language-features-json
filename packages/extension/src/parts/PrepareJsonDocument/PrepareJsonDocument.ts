@@ -30,7 +30,7 @@ export const prepareJsonDocument = async (
   if (!node) {
     return emptyDocument
   }
-  const schema = await GetSchema.getSchema(uri)
+  const schema = await GetSchema.getSchema(uri, text)
   return {
     schema,
     node,

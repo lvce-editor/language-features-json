@@ -2,16 +2,11 @@ import * as CachedSchema from '../CachedSchemas/CachedSchemas.ts'
 import * as GetSchemaUri from '../GetSchemaUri/GetSchemaUri.ts'
 import * as LoadSchema from '../LoadSchema/LoadSchema.ts'
 
-const actual = async (uri) => {
-  const schemaUri = await GetSchemaUri.getSchemaUri(uri)
-  const schema = await LoadSchema.loadSchema(schemaUri)
-  return schema
-}
-
-export const getSchema = async (uri) => {
-  if (!CachedSchema.has(uri)) {
-    const schema = await actual(uri)
-    CachedSchema.set(uri, schema)
+export const getSchema = async (uri: string, text = ''): Promise<any> => {
+  const schemaUri = await GetSchemaUri.getSchemaUri(uri, text)
+  if (!CachedSchema.has(schemaUri)) {
+    const schema = await LoadSchema.loadSchema(schemaUri)
+    CachedSchema.set(schemaUri, schema)
   }
-  return CachedSchema.get(uri)
+  return CachedSchema.get(schemaUri)
 }
