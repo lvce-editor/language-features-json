@@ -29,6 +29,17 @@
       "type": "boolean",
       "default": false,
       "description": "Allow Gpt Voice to execute Bash commands in the opened workspace."
+    },
+    "editor.cache": {
+      "type": "boolean",
+      "default": true,
+      "description": "Caches editor state for faster restoration."
+    },
+    "simpleBrowser.openExternalLinks": {
+      "type": "string",
+      "enum": ["newTab", "externalBrowser"],
+      "default": "newTab",
+      "description": "Controls where external links are opened."
     }
   },
   "hoverProviders": [

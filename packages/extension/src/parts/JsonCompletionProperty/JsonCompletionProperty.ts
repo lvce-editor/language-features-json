@@ -4,7 +4,7 @@ import * as PropertyKeyToCompletionOption from '../PropertyKeyToCompletionOption
 import * as ResolveSchemaRef from '../ResolveSchemaRef/ResolveSchemaRef.ts'
 import type { JsonSchema } from '../JsonSchema/JsonSchema.ts'
 
-const getSchemaProperties = (
+export const getSchemaProperties = (
   rootSchema: JsonSchema,
   schema: JsonSchema,
 ): JsonSchema['properties'] => {
@@ -43,6 +43,10 @@ export const jsonCompletionProperty = (
   node: AstNode,
 ): readonly CompletionItem[] => {
   const properties = getSchemaProperties(schema, schema)
-  const keys = Object.keys(properties || {})
-  return keys.map(PropertyKeyToCompletionOption.propertyKeyToCompletionOption)
+  return Object.entries(properties || {}).map(([key, propertySchema]) =>
+    PropertyKeyToCompletionOption.propertyKeyToCompletionOption(
+      key,
+      propertySchema,
+    ),
+  )
 }

@@ -11,7 +11,7 @@ export interface JsonSchema {
   readonly anyOf?: readonly JsonSchema[]
   readonly description?: string
   readonly type?: string
-  readonly enum?: readonly string[]
+  readonly enum?: readonly unknown[]
   readonly maximum?: number
   readonly minimum?: number
 }

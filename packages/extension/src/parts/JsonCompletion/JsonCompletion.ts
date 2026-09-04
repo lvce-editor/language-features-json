@@ -1,5 +1,6 @@
 import type { CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
+import * as GetPropertySchemaAtOffset from '../GetPropertySchemaAtOffset/GetPropertySchemaAtOffset.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as QuoteString from '../QuoteString/QuoteString.ts'
@@ -16,22 +17,32 @@ export const jsonCompletion = async (
   if (parsed === PrepareJsonDocument.emptyDocument) {
     return []
   }
-  const { node, schema } = parsed
+  const { node, nodes, schema } = parsed
+  const propertySchema = GetPropertySchemaAtOffset.getPropertySchemaAtOffset(
+    schema,
+    nodes,
+    textDocument.text,
+    offset,
+  )
 
-  if (node.type === TokenType.String) {
-    const options = schema?.properties?.type?.enum || []
+  if (propertySchema) {
+    const options =
+      propertySchema.enum ||
+      (propertySchema.type === 'boolean' ? [true, false] : [])
     return options.map(EnumToCompletionOption.enumToCompletionOption)
   }
-  if (node.type === TokenType.Object) {
+  if (node.type === TokenType.Object || node.type === TokenType.String) {
     return JsonCompletionProperty.jsonCompletionProperty(schema, node)
   }
   return []
 }
 
 export const resolve = (textDocument, offset, name, completionItem) => {
-  console.log({ name, completionItem })
   return {
     ...completionItem,
-    snippet: QuoteString.quoteString(name),
+    snippet:
+      typeof completionItem.snippet === 'string'
+        ? completionItem.snippet
+        : QuoteString.quoteString(name),
   }
 }

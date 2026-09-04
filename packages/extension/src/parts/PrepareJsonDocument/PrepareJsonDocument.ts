@@ -6,6 +6,7 @@ import * as Jsonc from '../Jsonc/Jsonc.ts'
 interface ParseJsonDocument {
   readonly schema: any
   readonly node: AstNode
+  readonly nodes: readonly AstNode[]
 }
 
 export const emptyDocument: ParseJsonDocument = {
@@ -16,6 +17,7 @@ export const emptyDocument: ParseJsonDocument = {
     length: 0,
     offset: 0,
   },
+  nodes: [],
 }
 
 export const prepareJsonDocument = async (
@@ -32,5 +34,6 @@ export const prepareJsonDocument = async (
   return {
     schema,
     node,
+    nodes: parsed,
   }
 }
