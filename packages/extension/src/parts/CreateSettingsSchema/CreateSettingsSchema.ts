@@ -5,19 +5,26 @@ import * as SettingType from '../SettingType/SettingType.ts'
 const getJsonType = (setting: SettingItem): string | undefined => {
   switch (setting.type) {
     case SettingType.Enum:
+    case 'enum':
     case SettingType.String:
+    case 'string':
     case SettingType.Color:
+    case 'color':
     case SettingType.Url:
+    case 'url':
       return 'string'
     case SettingType.Boolean:
+    case 'boolean':
       return 'boolean'
     case SettingType.Array:
+    case 'array':
       return setting.value &&
         typeof setting.value === 'object' &&
         !Array.isArray(setting.value)
         ? 'object'
         : 'array'
     case SettingType.Number:
+    case 'number':
       return 'number'
     default:
       return undefined
