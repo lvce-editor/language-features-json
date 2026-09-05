@@ -55,3 +55,31 @@ test('accepts valid component state', () => {
     ),
   ).toEqual([])
 })
+
+test('accepts a negative index before an integer header height', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      '{ "focusedIndex": -1, "headerHeight": 61 }',
+      {
+        properties: {
+          focusedIndex: { type: 'integer' },
+          headerHeight: { type: 'integer' },
+        },
+        type: 'object',
+      },
+    ),
+  ).toEqual([])
+})
+
+test('still validates properties following a negative number', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      '{ "focusedIndex": -1, "focused": "yes" }',
+      schema,
+    ),
+  ).toEqual([
+    expect.objectContaining({
+      message: 'Incorrect type. Expected "boolean" but received "string".',
+    }),
+  ])
+})

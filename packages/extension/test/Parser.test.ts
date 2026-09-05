@@ -253,3 +253,12 @@ test('object and array inside object', () => {
     },
   ])
 })
+
+test.each(['-1', '-0.5', '1e3', '-2.5E-3', '2e+3'])(
+  'parses JSON number %s',
+  (text) => {
+    expect(Jsonc.parse(text)).toEqual([
+      { type: TokenType.Number, offset: 0, length: text.length, childCount: 0 },
+    ])
+  },
+)
