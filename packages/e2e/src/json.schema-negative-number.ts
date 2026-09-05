@@ -10,14 +10,7 @@ export const test: Test = async ({
   Workspace,
 }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  const schema = {
-    properties: {
-      focusedIndex: { type: 'integer' },
-      headerHeight: { type: 'integer' },
-    },
-    type: 'object',
-  }
-  const schemaUri = `data:application/json,${encodeURIComponent(JSON.stringify(schema))}`
+  const schemaUri = '../extension/dist/state.schema.json'
   const text = JSON.stringify(
     { $schema: schemaUri, focusedIndex: -1, headerHeight: 61 },
     null,
