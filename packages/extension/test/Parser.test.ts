@@ -2,6 +2,15 @@ import * as Jsonc from '../src/parts/Jsonc/Jsonc.ts'
 import * as TokenType from '../src/parts/TokenType/TokenType.ts'
 import { test, expect } from '@jest/globals'
 
+test.each(['-1', '-0', '-1.5', '1e-7', '1E+21', '-2.5e+10'])(
+  'parses the complete JSON number %s',
+  (text) => {
+    expect(Jsonc.parse(text)).toEqual([
+      { type: TokenType.Number, offset: 0, length: text.length, childCount: 0 },
+    ])
+  },
+)
+
 test('boolean - true', () => {
   const text = 'true'
   expect(Jsonc.parse(text)).toEqual([

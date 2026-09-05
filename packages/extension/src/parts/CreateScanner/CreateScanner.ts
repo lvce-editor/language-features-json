@@ -39,6 +39,7 @@ export const createScanner = (text: string) => {
         case CharCode.Eight:
         case CharCode.Nine:
         case CharCode.Dot:
+        case CharCode.Minus:
           offset++
           return TokenType.Numeric
         case CharCode.CarriageReturn:
@@ -91,31 +92,36 @@ export const createScanner = (text: string) => {
     offset -= delta
   }
 
-  const scanNumber = () => {
-    const start = offset
-    outer: while (offset < length) {
+  const scanDigits = () => {
+    while (offset < length) {
       const code = text.charCodeAt(offset)
-      switch (code) {
-        case CharCode.Zero:
-        case CharCode.One:
-        case CharCode.Two:
-        case CharCode.Three:
-        case CharCode.Four:
-        case CharCode.Five:
-        case CharCode.Six:
-        case CharCode.Seven:
-        case CharCode.Eight:
-        case CharCode.Nine:
-        case CharCode.Dot:
-          break
-        default:
-          break outer
+      if (code < CharCode.Zero || code > CharCode.Nine) {
+        break
       }
       offset++
     }
-    const result = text.slice(start, offset)
-    result
-    return result
+  }
+
+  const scanNumber = () => {
+    const start = offset
+    if (text.charCodeAt(offset) === CharCode.Minus) {
+      offset++
+    }
+    scanDigits()
+    if (text.charCodeAt(offset) === CharCode.Dot) {
+      offset++
+      scanDigits()
+    }
+    const code = text.charCodeAt(offset)
+    if (code === CharCode.LowerE || code === CharCode.UpperE) {
+      offset++
+      const sign = text.charCodeAt(offset)
+      if (sign === CharCode.Minus || sign === CharCode.Plus) {
+        offset++
+      }
+      scanDigits()
+    }
+    return text.slice(start, offset)
   }
 
   const scanLiteral = () => {
