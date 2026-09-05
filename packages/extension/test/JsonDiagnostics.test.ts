@@ -12,6 +12,45 @@ const schema = {
   type: 'object',
 } as const
 
+test('validates the full value of a number with an exponent', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics('{"focusedIndex": 1e-7}', schema),
+  ).toEqual([
+    expect.objectContaining({
+      message: 'Incorrect type. Expected "integer" but received "number".',
+    }),
+  ])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"focusedIndex": -1e+2}', schema),
+  ).toEqual([])
+})
+
+test('validates arbitrary string dictionary entries', () => {
+  const cacheSchema = {
+    type: 'object',
+    additionalProperties: { type: 'string' },
+  }
+  const cache = Object.fromEntries(
+    Array.from({ length: 1000 }, (_, index) => [
+      `live-component-state:///${index}.json`,
+      '/file-icons/json.svg',
+    ]),
+  )
+  expect(
+    JsonDiagnostics.getDiagnostics(JSON.stringify(cache), cacheSchema),
+  ).toEqual([])
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      JSON.stringify({ ...cache, 'file:///invalid.json': 1 }),
+      cacheSchema,
+    ),
+  ).toEqual([
+    expect.objectContaining({
+      message: 'Incorrect type. Expected "string" but received "number".',
+    }),
+  ])
+})
+
 test('reports a property type mismatch', () => {
   expect(
     JsonDiagnostics.getDiagnostics('{ "focusedIndex": "first" }', schema),
