@@ -12,31 +12,6 @@ const schema = {
   type: 'object',
 } as const
 
-test('accepts negative main area state indices without losing following properties', () => {
-  const state = { pointerDownGroupIndex: -1, pointerDownTabIndex: -1, uid: 2 }
-  const stateSchema = {
-    properties: {
-      pointerDownGroupIndex: { type: 'integer' },
-      pointerDownTabIndex: { type: 'integer' },
-      uid: { type: 'integer' },
-    },
-    type: 'object',
-  }
-  expect(
-    JsonDiagnostics.getDiagnostics(JSON.stringify(state, null, 2), stateSchema),
-  ).toEqual([])
-  expect(
-    JsonDiagnostics.getDiagnostics(
-      JSON.stringify({ ...state, uid: 'invalid' }),
-      stateSchema,
-    ),
-  ).toEqual([
-    expect.objectContaining({
-      message: 'Incorrect type. Expected "integer" but received "string".',
-    }),
-  ])
-})
-
 test('validates the full value of a number with an exponent', () => {
   expect(
     JsonDiagnostics.getDiagnostics('{"focusedIndex": 1e-7}', schema),
@@ -118,4 +93,32 @@ test('accepts valid component state', () => {
       schema,
     ),
   ).toEqual([])
+})
+
+test('accepts a negative index before an integer header height', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      '{ "focusedIndex": -1, "headerHeight": 61 }',
+      {
+        properties: {
+          focusedIndex: { type: 'integer' },
+          headerHeight: { type: 'integer' },
+        },
+        type: 'object',
+      },
+    ),
+  ).toEqual([])
+})
+
+test('still validates properties following a negative number', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      '{ "focusedIndex": -1, "focused": "yes" }',
+      schema,
+    ),
+  ).toEqual([
+    expect.objectContaining({
+      message: 'Incorrect type. Expected "boolean" but received "string".',
+    }),
+  ])
 })

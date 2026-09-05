@@ -28,6 +28,7 @@ export const createScanner = (text: string) => {
           text.slice(offset) //?
           offset++
           return TokenType.Comma
+        case CharCode.Minus:
         case CharCode.Zero:
         case CharCode.One:
         case CharCode.Two:
@@ -39,7 +40,6 @@ export const createScanner = (text: string) => {
         case CharCode.Eight:
         case CharCode.Nine:
         case CharCode.Dot:
-        case CharCode.Minus:
           offset++
           return TokenType.Numeric
         case CharCode.CarriageReturn:

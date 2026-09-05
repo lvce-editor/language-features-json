@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "focusedIndex": { "type": "integer" },
+    "headerHeight": { "type": "integer" }
+  },
+  "type": "object"
+}
