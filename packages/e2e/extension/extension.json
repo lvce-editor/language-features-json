@@ -4,6 +4,7 @@
   "description": "Provides rich language support for JSON files during end-to-end tests",
   "activation": [
     "onLanguage:json",
+    "onDocumentSymbol:json",
     "onCompletion:json",
     "onDiagnostic:json",
     "onTabCompletion:json",

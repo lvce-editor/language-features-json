@@ -4,6 +4,7 @@
   "description": "Provides rich language support for JSON files",
   "activation": [
     "onLanguage:json",
+    "onDocumentSymbol:json",
     "onCompletion:json",
     "onDiagnostic:json",
     "onTabCompletion:json",
