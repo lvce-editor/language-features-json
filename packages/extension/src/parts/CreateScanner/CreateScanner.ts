@@ -70,12 +70,16 @@ export const createScanner = (text: string) => {
     while (offset < length) {
       const code = text.charCodeAt(offset)
       if (code === CharCode.DoubleQuote) {
-        break
+        const result = text.slice(start, offset)
+        offset++
+        return result
       }
-      offset++
+      if (text[offset] === '\\') {
+        offset++
+      }
+      offset = Math.min(offset + 1, length)
     }
     const result = text.slice(start, offset)
-    offset++
     return result
   }
 
@@ -134,6 +138,8 @@ export const createScanner = (text: string) => {
         case CharCode.Tab:
         case CharCode.Space:
         case CharCode.Comma:
+        case CharCode.CurlyClose:
+        case CharCode.SquareClose:
           break outer
         default:
           break
@@ -150,6 +156,7 @@ export const createScanner = (text: string) => {
         text.charCodeAt(offset) === CharCode.Star &&
         text.charCodeAt(offset + 1) === CharCode.Slash
       ) {
+        offset += 2
         break
       }
       offset++
@@ -167,7 +174,9 @@ export const createScanner = (text: string) => {
   }
 
   const scanComment = () => {
+    offset++
     const code = text.charCodeAt(offset)
+    offset++
     switch (code) {
       case CharCode.Star:
         return scanBlockComment()

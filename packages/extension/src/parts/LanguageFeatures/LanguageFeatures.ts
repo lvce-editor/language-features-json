@@ -1,11 +1,13 @@
 import {
   registerCompletionProvider,
   registerDiagnosticProvider,
+  registerDocumentSymbolProvider,
   registerHoverProvider,
   registerSelectionProvider,
 } from '@lvce-editor/api'
 import * as CompletionProvider from '../CompletionProvider/CompletionProvider.ts'
 import * as DiagnosticProvider from '../DiagnosticProvider/DiagnosticProvider.ts'
+import * as DocumentSymbolProvider from '../DocumentSymbolProvider/DocumentSymbolProvider.ts'
 import * as HoverProvider from '../HoverProvider/HoverProvider.ts'
 import * as SelectionProvider from '../SelectionProvider/SelectionProvider.ts'
 
@@ -14,4 +16,5 @@ export const register = (): void => {
   registerCompletionProvider(CompletionProvider)
   registerDiagnosticProvider(DiagnosticProvider)
   registerHoverProvider(HoverProvider)
+  registerDocumentSymbolProvider(DocumentSymbolProvider)
 }

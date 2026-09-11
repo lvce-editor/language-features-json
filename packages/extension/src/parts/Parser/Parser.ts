@@ -81,7 +81,9 @@ const parseArray = (scanner: Scanner): readonly AstNode[] => {
         break
       default:
         childCount++
-        scanner.goBack(1)
+        if (token !== TokenType.Literal) {
+          scanner.goBack(1)
+        }
         const value = parseValueInternal(scanner)
         nodes.push(...value)
         break
