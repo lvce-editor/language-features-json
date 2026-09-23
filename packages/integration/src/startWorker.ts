@@ -19,12 +19,16 @@ const getModuleUrl = (name: string): string => {
 }
 
 export const startWorker = async () => {
+  const JsonSyntaxDiagnostics = await import(
+    getModuleUrl('JsonSyntaxDiagnostics')
+  )
   const JsonCompletion = await import(getModuleUrl('JsonCompletion'))
   const JsonHover = await import(getModuleUrl('JsonHover'))
   const Selection = await import(getModuleUrl('Selection'))
   const commandMap = {
     'Completion.getCompletion': JsonCompletion.jsonCompletion,
     'Completion.resolve': JsonCompletion.resolve,
+    'Diagnostic.getSyntaxDiagnostics': JsonSyntaxDiagnostics.getDiagnostics,
     'Hover.getHover': JsonHover.getHover,
     'Selection.expand': Selection.expand,
   }
