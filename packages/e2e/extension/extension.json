@@ -56,6 +56,12 @@
       "type": "string",
       "default": "value",
       "description": "A string setting for completion tests."
+    },
+    "test.moduleType": {
+      "type": "string",
+      "enum": ["commonjs", "module"],
+      "default": "commonjs",
+      "description": "A string setting for JSON string completion tests."
     }
   },
   "hoverProviders": [

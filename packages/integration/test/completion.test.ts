@@ -99,9 +99,9 @@ test('resolve preserves the JSON insertion text', async () => {
 
 test.each([
   ['boolean', 'enabled', '"enabled": true', 11, 15],
-  ['enum', 'mode', '"mode": "first"', 8, 15],
+  ['enum', 'mode', '"mode": "first"', 9, 14],
   ['number', 'count', '"count": 42', 9, 11],
-  ['string', 'name', '"name": "value"', 8, 15],
+  ['string', 'name', '"name": "value"', 9, 14],
 ])(
   'resolve adds the %s property default selection',
   async (_type, label, snippet, startOffset, endOffset) => {

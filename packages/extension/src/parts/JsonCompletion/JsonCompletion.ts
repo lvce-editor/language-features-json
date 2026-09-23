@@ -5,6 +5,7 @@ import * as GetPropertySchemaAtOffset from '../GetPropertySchemaAtOffset/GetProp
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as QuoteString from '../QuoteString/QuoteString.ts'
+import * as ShouldAppendPropertyComma from '../ShouldAppendPropertyComma/ShouldAppendPropertyComma.ts'
 import * as TokenType from '../TokenType/TokenType.ts'
 
 export const jsonCompletion = async (
@@ -39,10 +40,17 @@ export const jsonCompletion = async (
 }
 
 export const resolve = (textDocument, offset, name, completionItem) => {
-  const snippet =
+  const baseSnippet =
     typeof completionItem.snippet === 'string'
       ? completionItem.snippet
       : QuoteString.quoteString(name)
+  const text = textDocument.text
+  const snippet = ShouldAppendPropertyComma.shouldAppendPropertyComma(
+    text,
+    offset,
+  )
+    ? `${baseSnippet},`
+    : baseSnippet
   const selectionRange =
     GetCompletionSelectionRange.getCompletionSelectionRange(
       completionItem.kind,

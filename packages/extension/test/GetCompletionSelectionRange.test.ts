@@ -5,11 +5,11 @@ import { getCompletionSelectionRange } from '../src/parts/GetCompletionSelection
 test.each([
   ['boolean true', 'editor.cache', '"editor.cache": true', 16, 20],
   ['boolean false', 'enabled', '"enabled": false', 11, 16],
-  ['enum', 'mode', '"mode": "first"', 8, 15],
+  ['enum', 'mode', '"mode": "first"', 9, 14],
   ['number', 'count', '"count": 42', 9, 11],
-  ['string', 'name', '"name": "value"', 8, 15],
+  ['string', 'name', '"name": "value"', 9, 14],
   ['colon in property name', 'prefix: name', '"prefix: name": true', 16, 20],
-  ['colon in string default', 'name', '"name": "prefix: value"', 8, 23],
+  ['colon in string default', 'name', '"name": "prefix: value"', 9, 22],
 ])(
   'selects the resolved %s default',
   (_name, label, snippet, startOffset, endOffset) => {
@@ -35,7 +35,13 @@ test('does not select a snippet for a different property', () => {
   ).toBeUndefined()
 })
 
-test('does not select a value completion', () => {
+test('selects the contents of a string value completion', () => {
+  expect(
+    getCompletionSelectionRange(CompletionType.Value, 'commonjs', '"commonjs"'),
+  ).toEqual({ endOffset: 9, startOffset: 1 })
+})
+
+test('does not select a non-string value completion', () => {
   expect(
     getCompletionSelectionRange(CompletionType.Value, 'enabled', 'true'),
   ).toBeUndefined()
