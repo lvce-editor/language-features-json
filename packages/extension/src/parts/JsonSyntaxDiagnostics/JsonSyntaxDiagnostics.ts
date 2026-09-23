@@ -1,5 +1,12 @@
 import type { Diagnostic } from '@lvce-editor/api'
 
+interface SyntaxError {
+  readonly message: string
+  readonly offset: number
+}
+
+const numberPattern = /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/y
+
 const removeComments = (
   text: string,
 ): { readonly text: string; readonly errorOffset: number } => {
@@ -53,64 +60,178 @@ const removeComments = (
   return { text: characters.join(''), errorOffset: -1 }
 }
 
-const removeTrailingCommas = (text: string): string => {
-  const characters = text.split('')
-  let inString = false
-  let escaped = false
-  for (let i = 0; i < characters.length; i++) {
-    const character = characters[i]
-    if (inString) {
-      if (escaped) {
-        escaped = false
-      } else if (character === '\\') {
-        escaped = true
-      } else if (character === '"') {
-        inString = false
-      }
-      continue
+const getSyntaxError = (text: string): SyntaxError | undefined => {
+  let offset = 0
+  let syntaxError: SyntaxError | undefined
+
+  const fail = (message: string): false => {
+    syntaxError = { message, offset }
+    return false
+  }
+
+  const skipWhitespace = (): void => {
+    while (
+      text[offset] === ' ' ||
+      text[offset] === '\t' ||
+      text[offset] === '\r' ||
+      text[offset] === '\n'
+    ) {
+      offset++
     }
+  }
+
+  const parseString = (): boolean => {
+    const start = offset
+    offset++
+    while (offset < text.length) {
+      const character = text[offset]
+      if (character === '"') {
+        offset++
+        return true
+      }
+      if (character.charCodeAt(0) < 0x20) {
+        return fail('Invalid character in JSON string.')
+      }
+      if (character === '\\') {
+        offset++
+        const escape = text[offset]
+        if (escape === 'u') {
+          const digits = text.slice(offset + 1, offset + 5)
+          if (!/^[0-9a-f]{4}$/i.test(digits)) {
+            return fail('Invalid Unicode escape in JSON string.')
+          }
+          offset += 5
+          continue
+        }
+        if (!'"\\/bfnrt'.includes(escape || '')) {
+          return fail('Invalid escape in JSON string.')
+        }
+      }
+      offset++
+    }
+    offset = text.length
+    if (offset < start) {
+      offset = start
+    }
+    return fail('Unterminated JSON string.')
+  }
+
+  const parseObject = (): boolean => {
+    offset++
+    skipWhitespace()
+    if (text[offset] === '}') {
+      offset++
+      return true
+    }
+    while (offset < text.length) {
+      if (text[offset] !== '"') {
+        return fail('Expected a quoted property name.')
+      }
+      if (!parseString()) {
+        return false
+      }
+      skipWhitespace()
+      if (text[offset] !== ':') {
+        return fail('Expected a colon after the property name.')
+      }
+      offset++
+      skipWhitespace()
+      if (!parseValue()) {
+        return false
+      }
+      skipWhitespace()
+      if (text[offset] === '}') {
+        offset++
+        return true
+      }
+      if (text[offset] !== ',') {
+        if (offset >= text.length) {
+          return fail("Expected '}' to close the object.")
+        }
+        return fail('Expected a comma between JSON values.')
+      }
+      offset++
+      skipWhitespace()
+      if (text[offset] === '}') {
+        offset++
+        return true
+      }
+    }
+    return fail("Expected '}' to close the object.")
+  }
+
+  const parseArray = (): boolean => {
+    offset++
+    skipWhitespace()
+    if (text[offset] === ']') {
+      offset++
+      return true
+    }
+    while (offset < text.length) {
+      if (!parseValue()) {
+        return false
+      }
+      skipWhitespace()
+      if (text[offset] === ']') {
+        offset++
+        return true
+      }
+      if (text[offset] !== ',') {
+        if (offset >= text.length) {
+          return fail("Expected ']' to close the array.")
+        }
+        return fail('Expected a comma between JSON values.')
+      }
+      offset++
+      skipWhitespace()
+      if (text[offset] === ']') {
+        offset++
+        return true
+      }
+    }
+    return fail("Expected ']' to close the array.")
+  }
+
+  const parseValue = (): boolean => {
+    skipWhitespace()
+    const character = text[offset]
     if (character === '"') {
-      inString = true
-    } else if (character === ',') {
-      let next = i + 1
-      while (/\s/.test(characters[next] || '')) {
-        next++
-      }
-      if (characters[next] === '}' || characters[next] === ']') {
-        characters[i] = ' '
-      }
+      return parseString()
     }
+    if (character === '{') {
+      return parseObject()
+    }
+    if (character === '[') {
+      return parseArray()
+    }
+    const literal = ['true', 'false', 'null'].find((value) =>
+      text.startsWith(value, offset),
+    )
+    if (literal) {
+      offset += literal.length
+      return true
+    }
+    if (character === '-' || (character >= '0' && character <= '9')) {
+      numberPattern.lastIndex = offset
+      const number = numberPattern.exec(text)
+      if (number) {
+        offset += number[0].length
+        return true
+      }
+      return fail('Invalid JSON number.')
+    }
+    return fail('Expected a JSON value.')
   }
-  return characters.join('')
-}
 
-const getOffset = (error: Error): number => {
-  const match = /position (\d+)/.exec(error.message)
-  return match ? Number(match[1]) : 0
-}
-
-const getMessage = (
-  error: Error,
-  offset: number,
-  textLength: number,
-): string => {
-  const message = error.message.toLowerCase()
-  if (message.includes('unterminated string')) {
-    return 'Unterminated JSON string.'
+  skipWhitespace()
+  if (!parseValue()) {
+    return syntaxError
   }
-  if (offset >= textLength) {
-    return 'Expected a closing brace or bracket.'
+  skipWhitespace()
+  if (offset < text.length) {
+    fail('Unexpected content after the JSON value.')
   }
-  if (message.includes("expected ',' or")) {
-    return 'Expected a comma between JSON values.'
-  }
-  if (message.includes("expected ':'")) {
-    return 'Expected a colon after the property name.'
-  }
-  if (message.includes('expected double-quoted property name')) {
-    return 'Expected a quoted property name.'
-  }
-  return 'Invalid JSON syntax.'
+  return syntaxError
 }
 
 const getPosition = (
@@ -130,12 +251,8 @@ const getPosition = (
   return { columnIndex, rowIndex }
 }
 
-const createDiagnostic = (
-  text: string,
-  offset: number,
-  message: string,
-): Diagnostic => {
-  const start = Math.min(offset, text.length)
+const createDiagnostic = (text: string, error: SyntaxError): Diagnostic => {
+  const start = Math.min(error.offset, text.length)
   const end = Math.min(start + (start < text.length ? 1 : 0), text.length)
   const endPosition = getPosition(text, end)
   return {
@@ -143,7 +260,7 @@ const createDiagnostic = (
     code: 'syntax',
     endColumnIndex: endPosition.columnIndex,
     endRowIndex: endPosition.rowIndex,
-    message,
+    message: error.message,
     source: 'json (syntax)',
     type: 'error',
   }
@@ -153,27 +270,12 @@ export const getDiagnostics = (text: string): readonly Diagnostic[] => {
   const commentsRemoved = removeComments(text)
   if (commentsRemoved.errorOffset >= 0) {
     return [
-      createDiagnostic(
-        text,
-        commentsRemoved.errorOffset,
-        'Unterminated JSON comment.',
-      ),
+      createDiagnostic(text, {
+        message: 'Unterminated JSON comment.',
+        offset: commentsRemoved.errorOffset,
+      }),
     ]
   }
-  try {
-    JSON.parse(removeTrailingCommas(commentsRemoved.text))
-    return []
-  } catch (error) {
-    if (!(error instanceof Error)) {
-      return [createDiagnostic(text, 0, 'Invalid JSON syntax.')]
-    }
-    const offset = getOffset(error)
-    return [
-      createDiagnostic(
-        text,
-        offset,
-        getMessage(error, offset, text.length),
-      ),
-    ]
-  }
+  const error = getSyntaxError(commentsRemoved.text)
+  return error ? [createDiagnostic(text, error)] : []
 }

@@ -21,11 +21,11 @@ test('reports a missing property colon', () => {
 })
 
 test('reports a missing property value', () => {
-  expect(getMessage('{"name":}')).toBe('Invalid JSON syntax.')
+  expect(getMessage('{"name":}')).toBe('Expected a JSON value.')
 })
 
 test('reports an invalid literal', () => {
-  expect(getMessage('{"enabled": tru}')).toBe('Invalid JSON syntax.')
+  expect(getMessage('{"enabled": tru}')).toBe('Expected a JSON value.')
 })
 
 test('reports an unterminated string', () => {
@@ -34,16 +34,24 @@ test('reports an unterminated string', () => {
 
 test('reports an unmatched delimiter', () => {
   expect(getMessage('{"name":"app"')).toBe(
-    'Expected a closing brace or bracket.',
+    "Expected '}' to close the object.",
   )
 })
 
 test('reports trailing non-whitespace content', () => {
-  expect(getMessage('{"name":"app"} true')).toBe('Invalid JSON syntax.')
+  expect(getMessage('{"name":"app"} true')).toBe(
+    'Unexpected content after the JSON value.',
+  )
 })
 
 test('accepts valid JSON', () => {
   expect(JsonSyntaxDiagnostics.getDiagnostics('{"name":"app"}')).toEqual([])
+})
+
+test('accepts JSON literals and numbers', () => {
+  expect(
+    JsonSyntaxDiagnostics.getDiagnostics('[true, false, null, -1, 1.5, 2e3]'),
+  ).toEqual([])
 })
 
 test('accepts the comments and trailing commas used by JSONC documents', () => {
