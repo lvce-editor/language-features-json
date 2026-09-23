@@ -2,6 +2,7 @@ import type { Diagnostic } from '@lvce-editor/api'
 import type { AstNode } from '../AstNode/AstNode.ts'
 import type { JsonSchema } from '../JsonSchema/JsonSchema.ts'
 import * as Jsonc from '../Jsonc/Jsonc.ts'
+import * as JsonDiagnostics from '../JsonDiagnostics/JsonDiagnostics.ts'
 import * as TokenType from '../TokenType/TokenType.ts'
 
 const getSubtreeEnd = (
@@ -80,7 +81,9 @@ export const getSettingsDiagnostics = (
   if (!root || root.type !== TokenType.Object) {
     return []
   }
-  const diagnostics: Diagnostic[] = []
+  const diagnostics: Diagnostic[] = [
+    ...JsonDiagnostics.getDiagnostics(text, schema),
+  ]
   let index = 1
   for (let i = 0; i < root.childCount && index < nodes.length; i++) {
     const property = nodes[index]
