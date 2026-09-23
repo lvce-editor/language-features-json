@@ -64,6 +64,64 @@ test('reports a property type mismatch', () => {
   ])
 })
 
+test('validates inclusive numeric minimum and maximum bounds', () => {
+  const boundedSchema = {
+    properties: {
+      value: { maximum: 100, minimum: 10, type: 'number' },
+    },
+    type: 'object',
+  }
+
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": -15}', boundedSchema),
+  ).toEqual([
+    expect.objectContaining({
+      code: 'minimum',
+      message: 'Value must be greater than or equal to 10.',
+    }),
+  ])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": 9}', boundedSchema),
+  ).toHaveLength(1)
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": 10}', boundedSchema),
+  ).toEqual([])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": 15}', boundedSchema),
+  ).toEqual([])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": 100}', boundedSchema),
+  ).toEqual([])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": 101}', boundedSchema),
+  ).toEqual([
+    expect.objectContaining({
+      code: 'maximum',
+      message: 'Value must be less than or equal to 100.',
+    }),
+  ])
+})
+
+test('applies zero bounds and ignores unbounded numbers', () => {
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": -1}', {
+      properties: { value: { minimum: 0 } },
+      type: 'object',
+    }),
+  ).toEqual([
+    expect.objectContaining({
+      code: 'minimum',
+      message: 'Value must be greater than or equal to 0.',
+    }),
+  ])
+  expect(
+    JsonDiagnostics.getDiagnostics('{"value": -1}', {
+      properties: { value: { type: 'number' } },
+      type: 'object',
+    }),
+  ).toEqual([])
+})
+
 test('validates nested properties', () => {
   expect(
     JsonDiagnostics.getDiagnostics('{ "nested": { "label": false } }', schema),

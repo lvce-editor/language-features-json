@@ -133,6 +133,28 @@ const validateNode = (
       ),
     )
   }
+  if (node.type === TokenType.Number && typeof value === 'number') {
+    if (schema.minimum !== undefined && value < schema.minimum) {
+      diagnostics.push(
+        createDiagnostic(
+          text,
+          node,
+          'minimum',
+          `Value must be greater than or equal to ${schema.minimum}.`,
+        ),
+      )
+    }
+    if (schema.maximum !== undefined && value > schema.maximum) {
+      diagnostics.push(
+        createDiagnostic(
+          text,
+          node,
+          'maximum',
+          `Value must be less than or equal to ${schema.maximum}.`,
+        ),
+      )
+    }
+  }
   if (node.type === TokenType.Object) {
     let childIndex = index + 1
     for (let i = 0; i < node.childCount && childIndex < nodes.length; i++) {

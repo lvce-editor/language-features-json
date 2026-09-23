@@ -27,6 +27,7 @@ export const test = async ({
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
   const settingsText = `{
+  "editor.fontSize": -15,
   "gptvoice.tools.terminal.enabled": true,
   "gptvoice.tools.terminal.enable": true
 }`
@@ -44,11 +45,21 @@ export const test = async ({
   // assert
   const expectedDiagnostics = [
     {
+      columnIndex: 21,
+      code: 'minimum',
+      endColumnIndex: 24,
+      endRowIndex: 1,
+      message: 'Value must be greater than or equal to 10.',
+      rowIndex: 1,
+      source: 'json (schema_validation)',
+      type: 'error',
+    },
+    {
       columnIndex: 3,
       endColumnIndex: 33,
-      endRowIndex: 2,
+      endRowIndex: 3,
       message: 'Unknown setting "gptvoice.tools.terminal.enable".',
-      rowIndex: 2,
+      rowIndex: 3,
       source: 'json (settings_validation)',
       type: 'warning',
     },
@@ -58,6 +69,15 @@ export const test = async ({
   const diagnosticWarning = Locator('.DiagnosticWarning')
   const diagnosticError = Locator('.DiagnosticError')
   await expect(diagnosticWarning).toBeVisible()
+  await expect(diagnosticError).toBeVisible()
+
+  // Correct the number and verify its diagnostic clears.
+  const correctedSettingsText = settingsText.replace(
+    '"editor.fontSize": -15',
+    '"editor.fontSize": 15',
+  )
+  await Editor.setText(correctedSettingsText)
+  await waitFor(() => Editor.shouldHaveDiagnostics([expectedDiagnostics[1]]))
   await expect(diagnosticError).toHaveCount(0)
 
   await Panel.open('Problems')
