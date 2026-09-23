@@ -28,5 +28,5 @@ export const test: Test = async ({
   await Editor.shouldHaveText(
     '{"simpleBrowser.openExternalLinks": "externalBrowser"}',
   )
-  await Editor.shouldHaveSelections(new Uint32Array([0, 53, 0, 53]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 37, 0, 52]))
 }

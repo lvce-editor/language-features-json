@@ -25,5 +25,5 @@ export const test: Test = async ({
   await EditorCompletion.selectIndex(2)
 
   await Editor.shouldHaveText('{"simpleBrowser.openExternalLinks": "newTab"}')
-  await Editor.shouldHaveSelections(new Uint32Array([0, 36, 0, 44]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 37, 0, 43]))
 }

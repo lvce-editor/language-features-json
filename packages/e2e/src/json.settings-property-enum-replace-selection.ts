@@ -23,11 +23,11 @@ export const test: Test = async ({
     'simpleBrowser.openExternalLinks',
   )
   await EditorCompletion.selectIndex(2)
-  await Editor.shouldHaveSelections(new Uint32Array([0, 36, 0, 44]))
-  await Editor.type('"externalBrowser"')
+  await Editor.shouldHaveSelections(new Uint32Array([0, 37, 0, 43]))
+  await Editor.type('externalBrowser')
 
   await Editor.shouldHaveText(
     '{"simpleBrowser.openExternalLinks": "externalBrowser"}',
   )
-  await Editor.shouldHaveSelections(new Uint32Array([0, 53, 0, 53]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 52, 0, 52]))
 }

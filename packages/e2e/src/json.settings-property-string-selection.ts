@@ -25,5 +25,5 @@ export const test: Test = async ({
   await EditorCompletion.selectIndex(5)
 
   await Editor.shouldHaveText('{"test.string": "value"}')
-  await Editor.shouldHaveSelections(new Uint32Array([0, 16, 0, 23]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 17, 0, 22]))
 }
