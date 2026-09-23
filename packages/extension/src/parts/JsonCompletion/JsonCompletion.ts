@@ -1,4 +1,4 @@
-import type { CompletionItem } from '@lvce-editor/api'
+import { getColorThemeNames, type CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
 import * as GetCompletionSelectionRange from '../GetCompletionSelectionRange/GetCompletionSelectionRange.ts'
 import * as GetPropertySchemaAtOffset from '../GetPropertySchemaAtOffset/GetPropertySchemaAtOffset.ts'
@@ -27,6 +27,23 @@ export const jsonCompletion = async (
     offset,
   )
 
+  const propertyName = GetPropertySchemaAtOffset.getPropertyNameAtOffset(
+    nodes,
+    textDocument.text,
+    offset,
+  )
+  if (
+    propertyName === 'workbench.colorTheme' &&
+    propertySchema?.type === 'string' &&
+    node.type === TokenType.String
+  ) {
+    const colorThemeNames = await getColorThemeNames()
+    return colorThemeNames.map((name) => ({
+      ...EnumToCompletionOption.enumToCompletionOption(name),
+      snippet: name,
+    }))
+  }
+
   if (propertySchema) {
     const options =
       propertySchema.enum ||
@@ -39,27 +56,62 @@ export const jsonCompletion = async (
   return []
 }
 
+const getStringEndOffset = (text: string, offset: number): number => {
+  let escaped = false
+  for (let index = offset; index < text.length; index++) {
+    const char = text[index]
+    if (escaped) {
+      escaped = false
+      continue
+    }
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+    if (char === '"') {
+      return index + 1
+    }
+  }
+  return offset
+}
+
 export const resolve = (textDocument, offset, name, completionItem) => {
   const baseSnippet =
     typeof completionItem.snippet === 'string'
       ? completionItem.snippet
       : QuoteString.quoteString(name)
   const text = textDocument.text
-  const snippet = ShouldAppendPropertyComma.shouldAppendPropertyComma(
+  const isColorThemeValue =
+    /"workbench\.colorTheme"\s*:\s*"(?:[^"\\]|\\.)*$/.test(
+      text.slice(0, offset),
+    ) &&
+    completionItem.kind === 2 &&
+    baseSnippet === name
+  const quoteStart = isColorThemeValue ? text.lastIndexOf('"', offset - 1) : -1
+  const prefix = isColorThemeValue ? text.slice(quoteStart + 1, offset) : ''
+  const snippet =
+    isColorThemeValue && name.startsWith(prefix)
+      ? name.slice(prefix.length)
+      : baseSnippet
+  const valueEndOffset = isColorThemeValue
+    ? getStringEndOffset(text, offset)
+    : offset
+  const resolvedSnippet = ShouldAppendPropertyComma.shouldAppendPropertyComma(
     text,
     offset,
+    valueEndOffset,
   )
-    ? `${baseSnippet},`
-    : baseSnippet
+    ? `${snippet},`
+    : snippet
   const selectionRange =
     GetCompletionSelectionRange.getCompletionSelectionRange(
       completionItem.kind,
       name,
-      snippet,
+      resolvedSnippet,
     )
   return {
     ...completionItem,
-    snippet,
+    snippet: resolvedSnippet,
     ...(selectionRange && { selectionRange }),
   }
 }

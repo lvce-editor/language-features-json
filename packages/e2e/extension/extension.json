@@ -64,6 +64,13 @@
       "description": "A string setting for JSON string completion tests."
     }
   },
+  "colorThemes": [
+    {
+      "id": "test.theme-id",
+      "label": "A Display Label That Differs From The ID",
+      "path": "themes/test-theme.json"
+    }
+  ],
   "hoverProviders": [
     {
       "id": "json.provideHover.json",
