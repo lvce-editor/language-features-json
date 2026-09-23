@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "workspaces": {
+      "type": "object",
+      "additionalProperties": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/workspace"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "workspace": {
+      "type": "object",
+      "properties": {
+        "entry": {
+          "title": "The entry files target the starting point(s) to resolve the rest of the imported code.",
+          "$ref": "#/definitions/globPatterns"
+        },
+        "project": {
+          "title": "The project files should contain all files to match against the files resolved from the entry files, including potentially unused files.",
+          "$ref": "#/definitions/globPatterns"
+        }
+      }
+    },
+    "globPatterns": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}
