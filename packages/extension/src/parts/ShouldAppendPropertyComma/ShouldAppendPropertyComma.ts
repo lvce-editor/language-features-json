@@ -32,8 +32,9 @@ const skipTrivia = (text: string, start: number): number => {
 export const shouldAppendPropertyComma = (
   text: string,
   offset: number,
+  valueEndOffset: number = offset,
 ): boolean => {
-  const after = skipTrivia(text, offset)
+  const after = skipTrivia(text, valueEndOffset)
   const nextChar = text[after]
   return nextChar !== undefined && nextChar !== ',' && nextChar !== '}'
 }

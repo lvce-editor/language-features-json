@@ -12,16 +12,11 @@ const parsePropertyName = (text: string, node: AstNode): string | undefined => {
   }
 }
 
-export const getPropertySchemaAtOffset = (
-  rootSchema: JsonSchema,
+export const getPropertyNameAtOffset = (
   nodes: readonly AstNode[],
   text: string,
   offset: number,
-): JsonSchema | undefined => {
-  const properties = JsonCompletionProperty.getSchemaProperties(
-    rootSchema,
-    rootSchema,
-  )
+): string | undefined => {
   for (let index = nodes.length - 1; index >= 0; index--) {
     const property = nodes[index]
     if (property.type !== TokenType.Property) {
@@ -37,8 +32,22 @@ export const getPropertySchemaAtOffset = (
     }
     const propertyName = parsePropertyName(text, key)
     if (propertyName !== undefined) {
-      return properties?.[propertyName]
+      return propertyName
     }
   }
   return undefined
+}
+
+export const getPropertySchemaAtOffset = (
+  rootSchema: JsonSchema,
+  nodes: readonly AstNode[],
+  text: string,
+  offset: number,
+): JsonSchema | undefined => {
+  const properties = JsonCompletionProperty.getSchemaProperties(
+    rootSchema,
+    rootSchema,
+  )
+  const propertyName = getPropertyNameAtOffset(nodes, text, offset)
+  return propertyName === undefined ? undefined : properties?.[propertyName]
 }
