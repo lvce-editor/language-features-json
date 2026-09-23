@@ -10,7 +10,10 @@ export interface JsonSchema {
   }
   readonly allOf?: readonly JsonSchema[]
   readonly anyOf?: readonly JsonSchema[]
+  readonly oneOf?: readonly JsonSchema[]
   readonly description?: string
+  readonly markdownDescription?: string
+  readonly title?: string
   readonly items?: JsonSchema
   readonly type?: string | readonly string[]
   readonly enum?: readonly unknown[]

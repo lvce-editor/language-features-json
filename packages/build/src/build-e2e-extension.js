@@ -20,3 +20,8 @@ fs.copyFileSync(
   path.join(root, 'packages', 'e2e', 'fixtures', 'state.schema.json'),
   path.join(targetDirectory, 'state.schema.json'),
 )
+
+fs.copyFileSync(
+  path.join(root, 'packages', 'e2e', 'fixtures', 'knip.schema.json'),
+  path.join(targetDirectory, 'knip.schema.json'),
+)
