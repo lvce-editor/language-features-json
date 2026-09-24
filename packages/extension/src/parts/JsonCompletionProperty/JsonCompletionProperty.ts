@@ -39,10 +39,11 @@ export const getSchemaProperties = (
 }
 
 export const jsonCompletionProperty = (
-  schema: JsonSchema,
+  rootSchema: JsonSchema,
   node: AstNode,
+  schema: JsonSchema = rootSchema,
 ): readonly CompletionItem[] => {
-  const properties = getSchemaProperties(schema, schema)
+  const properties = getSchemaProperties(rootSchema, schema)
   return Object.entries(properties || {}).map(([key, propertySchema]) =>
     PropertyKeyToCompletionOption.propertyKeyToCompletionOption(
       key,

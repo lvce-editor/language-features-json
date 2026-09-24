@@ -1,7 +1,28 @@
 {
   "properties": {
     "focusedIndex": { "type": "integer" },
-    "headerHeight": { "type": "integer" }
+    "headerHeight": { "type": "integer" },
+    "outerOnly": { "type": "boolean" },
+    "nested": {
+      "properties": {
+        "innerOnly": { "type": "boolean" },
+        "entries": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/entry" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "entry": {
+      "allOf": [
+        {
+          "properties": {
+            "arrayOnly": { "type": "boolean" }
+          }
+        }
+      ]
+    }
   },
   "type": "object"
 }
