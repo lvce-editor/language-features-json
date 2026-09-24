@@ -23,11 +23,13 @@ export const startWorker = async () => {
     getModuleUrl('JsonSyntaxDiagnostics')
   )
   const JsonCompletion = await import(getModuleUrl('JsonCompletion'))
+  const DiagnosticProvider = await import(getModuleUrl('DiagnosticProvider'))
   const JsonHover = await import(getModuleUrl('JsonHover'))
   const Selection = await import(getModuleUrl('Selection'))
   const commandMap = {
     'Completion.getCompletion': JsonCompletion.jsonCompletion,
     'Completion.resolve': JsonCompletion.resolve,
+    'Diagnostic.getDiagnostics': DiagnosticProvider.provideDiagnostics,
     'Diagnostic.getSyntaxDiagnostics': JsonSyntaxDiagnostics.getDiagnostics,
     'Hover.getHover': JsonHover.getHover,
     'Selection.expand': Selection.expand,
