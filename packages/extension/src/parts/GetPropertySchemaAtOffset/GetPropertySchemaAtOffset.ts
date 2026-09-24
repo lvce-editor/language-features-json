@@ -43,10 +43,11 @@ export const getPropertySchemaAtOffset = (
   nodes: readonly AstNode[],
   text: string,
   offset: number,
+  schemaAtOffset: JsonSchema = rootSchema,
 ): JsonSchema | undefined => {
   const properties = JsonCompletionProperty.getSchemaProperties(
     rootSchema,
-    rootSchema,
+    schemaAtOffset,
   )
   const propertyName = getPropertyNameAtOffset(nodes, text, offset)
   return propertyName === undefined ? undefined : properties?.[propertyName]

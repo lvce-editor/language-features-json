@@ -2,6 +2,7 @@ import { getColorThemeNames, type CompletionItem } from '@lvce-editor/api'
 import * as EnumToCompletionOption from '../EnumToCompletionOption/EnumToCompletionOption.ts'
 import * as GetCompletionSelectionRange from '../GetCompletionSelectionRange/GetCompletionSelectionRange.ts'
 import * as GetPropertySchemaAtOffset from '../GetPropertySchemaAtOffset/GetPropertySchemaAtOffset.ts'
+import * as GetSchemaAtOffset from '../GetSchemaAtOffset/GetSchemaAtOffset.ts'
 import * as JsonCompletionProperty from '../JsonCompletionProperty/JsonCompletionProperty.ts'
 import * as PrepareJsonDocument from '../PrepareJsonDocument/PrepareJsonDocument.ts'
 import * as QuoteString from '../QuoteString/QuoteString.ts'
@@ -20,11 +21,18 @@ export const jsonCompletion = async (
     return []
   }
   const { node, nodes, schema } = parsed
+  const schemaAtOffset = GetSchemaAtOffset.getSchemaAtOffset(
+    schema,
+    nodes,
+    textDocument.text,
+    offset,
+  )
   const propertySchema = GetPropertySchemaAtOffset.getPropertySchemaAtOffset(
     schema,
     nodes,
     textDocument.text,
     offset,
+    schemaAtOffset,
   )
 
   const propertyName = GetPropertySchemaAtOffset.getPropertyNameAtOffset(
@@ -51,7 +59,11 @@ export const jsonCompletion = async (
     return options.map(EnumToCompletionOption.enumToCompletionOption)
   }
   if (node.type === TokenType.Object || node.type === TokenType.String) {
-    return JsonCompletionProperty.jsonCompletionProperty(schema, node)
+    return JsonCompletionProperty.jsonCompletionProperty(
+      schema,
+      node,
+      schemaAtOffset,
+    )
   }
   return []
 }
