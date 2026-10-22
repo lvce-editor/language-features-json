@@ -267,6 +267,9 @@ const createDiagnostic = (text: string, error: SyntaxError): Diagnostic => {
 }
 
 export const getDiagnostics = (text: string): readonly Diagnostic[] => {
+  if (text.length === 0) {
+    return []
+  }
   const commentsRemoved = removeComments(text)
   if (commentsRemoved.errorOffset >= 0) {
     return [

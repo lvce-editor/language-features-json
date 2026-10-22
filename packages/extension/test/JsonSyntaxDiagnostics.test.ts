@@ -10,6 +10,14 @@ test('reports a missing comma between object properties', () => {
   )
 })
 
+test('accepts an empty document', () => {
+  expect(JsonSyntaxDiagnostics.getDiagnostics('')).toEqual([])
+})
+
+test('still reports whitespace-only documents as invalid JSON', () => {
+  expect(getMessage(' ')).toBe('Expected a JSON value.')
+})
+
 test('reports a missing comma between array items', () => {
   expect(getMessage('[1 2]')).toBe('Expected a comma between JSON values.')
 })

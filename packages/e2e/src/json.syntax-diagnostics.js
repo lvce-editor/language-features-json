@@ -24,9 +24,11 @@ export const test = async ({
 }) => {
   const tmpDir = await FileSystem.getTmpDir()
   const filePath = `${tmpDir}/package.json`
-  await FileSystem.writeFile(filePath, '{}')
+  await FileSystem.writeFile(filePath, '')
   await Workspace.setPath(tmpDir)
   await Main.openUri(filePath)
+  await waitFor(() => Editor.shouldHaveDiagnostics([]))
+  await expect(Locator('.DiagnosticError')).toHaveCount(0)
 
   const cases = [
     {
