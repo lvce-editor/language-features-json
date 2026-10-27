@@ -79,7 +79,7 @@ test('boolean value completion', async () => {
   ])
 })
 
-test('resolve preserves the JSON insertion text', async () => {
+test('resolve selects a boolean value without changing its insertion text', async () => {
   const worker = await testWorker({ execMap: {} })
   const completionItem = {
     kind: 2,
@@ -94,7 +94,10 @@ test('resolve preserves the JSON insertion text', async () => {
       'true',
       completionItem,
     ),
-  ).resolves.toEqual(completionItem)
+  ).resolves.toEqual({
+    ...completionItem,
+    selectionRange: { endOffset: 4, startOffset: 0 },
+  })
 })
 
 test.each([

@@ -26,5 +26,7 @@ export const test: Test = async ({
   await EditorCompletion.selectIndex(0)
 
   await Editor.shouldHaveText('{"editor.cache": true}')
-  await Editor.shouldHaveSelections(new Uint32Array([0, 21, 0, 21]))
+  await Editor.shouldHaveSelections(new Uint32Array([0, 17, 0, 21]))
+  await Editor.type('false')
+  await Editor.shouldHaveText('{"editor.cache": false}')
 }

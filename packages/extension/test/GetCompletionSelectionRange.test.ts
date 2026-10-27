@@ -5,6 +5,8 @@ import { getCompletionSelectionRange } from '../src/parts/GetCompletionSelection
 test.each([
   ['boolean true', 'editor.cache', '"editor.cache": true', 16, 20],
   ['boolean false', 'enabled', '"enabled": false', 11, 16],
+  ['boolean true before another property', 'editor.cache', '"editor.cache": true,', 16, 20],
+  ['boolean false before another property', 'enabled', '"enabled": false,', 11, 16],
   ['enum', 'mode', '"mode": "first"', 9, 14],
   ['number', 'count', '"count": 42', 9, 11],
   ['string', 'name', '"name": "value"', 9, 14],
@@ -35,14 +37,29 @@ test('does not select a snippet for a different property', () => {
   ).toBeUndefined()
 })
 
+test.each(['true', 'false'])('selects the boolean value %s', (value) => {
+  expect(
+    getCompletionSelectionRange(CompletionType.Value, value, value),
+  ).toEqual({ endOffset: value.length, startOffset: 0 })
+})
+
+test.each(['true', 'false'])(
+  'selects the boolean value %s without its trailing comma',
+  (value) => {
+    expect(
+      getCompletionSelectionRange(CompletionType.Value, value, `${value},`),
+    ).toEqual({ endOffset: value.length, startOffset: 0 })
+  },
+)
+
 test('selects the contents of a string value completion', () => {
   expect(
     getCompletionSelectionRange(CompletionType.Value, 'commonjs', '"commonjs"'),
   ).toEqual({ endOffset: 9, startOffset: 1 })
 })
 
-test('does not select a non-string value completion', () => {
+test('does not select a numeric value completion', () => {
   expect(
-    getCompletionSelectionRange(CompletionType.Value, 'enabled', 'true'),
+    getCompletionSelectionRange(CompletionType.Value, 'count', '42'),
   ).toBeUndefined()
 })
