@@ -11,6 +11,18 @@ export const getCompletionSelectionRange = (
   snippet: string,
 ): CompletionSelectionRange | undefined => {
   if (kind === CompletionType.Value) {
+    if (snippet === 'true' || snippet === 'false') {
+      return {
+        endOffset: snippet.length,
+        startOffset: 0,
+      }
+    }
+    if (snippet === 'true,' || snippet === 'false,') {
+      return {
+        endOffset: snippet.length - 1,
+        startOffset: 0,
+      }
+    }
     if (!snippet.startsWith('"') || !snippet.includes('"', 1)) {
       return undefined
     }
@@ -31,6 +43,6 @@ export const getCompletionSelectionRange = (
   const isString = value.startsWith('"') && value.includes('"', 1)
   const startOffset = propertyPrefix.length + (isString ? 1 : 0)
   const endOffset =
-    snippet.length - (isString ? (value.endsWith(',') ? 2 : 1) : 0)
+    snippet.length - (isString ? 1 : 0) - (value.endsWith(',') ? 1 : 0)
   return { endOffset, startOffset }
 }
