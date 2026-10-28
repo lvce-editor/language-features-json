@@ -27,6 +27,7 @@ test('hover', async () => {
   expect(await worker.execute('Hover.getHover', textDocument, offset)).toEqual({
     displayString: '',
     documentation: 'test description',
+    documentationFormat: 'plaintext',
   })
 })
 
@@ -67,6 +68,7 @@ test('with definitions', async () => {
     displayString: '',
     documentation:
       'Instructs the TypeScript compiler how to compile .ts files.',
+    documentationFormat: 'plaintext',
   })
 })
 
@@ -122,7 +124,8 @@ test('with definitions - nested property', async () => {
   expect(await worker.execute('Hover.getHover', textDocument, offset)).toEqual({
     displayString: '',
     documentation:
-      'Enable constraints that allow a TypeScript project to be used with project references.',
+      'Enable constraints that allow a TypeScript project to be used with project references.\n\nSee more: https://www.typescriptlang.org/tsconfig#composite',
+    documentationFormat: 'markdown',
   })
 })
 
@@ -167,5 +170,40 @@ test('with additional properties and allOf references', async () => {
   ).toEqual({
     displayString: '',
     documentation: 'Files to include in this workspace.',
+    documentationFormat: 'plaintext',
+  })
+})
+
+test('marks a direct markdownDescription as Markdown', async () => {
+  const worker = await testWorker({
+    execMap: {
+      'Json.loadSchema'() {
+        return {
+          type: 'object',
+          properties: {
+            type: {
+              description: 'plain fallback',
+              markdownDescription:
+                'Use **Markdown** and [links](https://example.com).',
+            },
+          },
+        }
+      },
+    },
+  })
+  const text =
+    '{ "$schema": "https://example.com/markdown.schema.json", "type": "module" }'
+  const offset = text.indexOf('"type"') + 3
+
+  await expect(
+    worker.execute(
+      'Hover.getHover',
+      { uri: 'test://markdown.json', text },
+      offset,
+    ),
+  ).resolves.toEqual({
+    displayString: '',
+    documentation: 'Use **Markdown** and [links](https://example.com).',
+    documentationFormat: 'markdown',
   })
 })

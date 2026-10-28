@@ -119,16 +119,32 @@ const getPropertySchema = (
   return {}
 }
 
-const getDocumentation = (schema: JsonSchema, root: JsonSchema): string => {
+const getDocumentation = (
+  schema: JsonSchema,
+  root: JsonSchema,
+): { documentation: string; documentationFormat: 'markdown' | 'plaintext' } => {
   const applicable = getApplicableSchemas(schema, root)
   for (const item of applicable) {
-    const documentation =
-      item.description || item.markdownDescription || item.title
-    if (documentation) {
-      return documentation
+    if (item.markdownDescription) {
+      return {
+        documentation: item.markdownDescription,
+        documentationFormat: 'markdown',
+      }
+    }
+    if (item.description) {
+      return {
+        documentation: item.description,
+        documentationFormat: 'plaintext',
+      }
+    }
+    if (item.title) {
+      return {
+        documentation: item.title,
+        documentationFormat: 'plaintext',
+      }
     }
   }
-  return ''
+  return { documentation: '', documentationFormat: 'plaintext' }
 }
 
 export const getHover = async (textDocument, offset) => {
@@ -149,7 +165,7 @@ export const getHover = async (textDocument, offset) => {
     }
     return {
       displayString: '',
-      documentation: getDocumentation(current, schema),
+      ...getDocumentation(current, schema),
     }
   }
   return undefined
