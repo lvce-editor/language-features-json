@@ -88,11 +88,29 @@ const getStringEndOffset = (text: string, offset: number): number => {
 }
 
 export const resolve = (textDocument, offset, name, completionItem) => {
-  const baseSnippet =
+  let baseSnippet =
     typeof completionItem.snippet === 'string'
       ? completionItem.snippet
       : QuoteString.quoteString(name)
   const text = textDocument.text
+  if (completionItem.kind === 1 && baseSnippet.startsWith('"')) {
+    const beforeCursor = text.slice(0, offset)
+    const afterCursor = text.slice(offset)
+    const openingQuote = beforeCursor.lastIndexOf('"')
+    const hasOpenPropertyQuote =
+      openingQuote >= 0 && !beforeCursor.slice(openingQuote + 1).includes('"')
+    const hasExistingClosingQuote = afterCursor.startsWith('"')
+    if (hasOpenPropertyQuote) {
+      baseSnippet = baseSnippet.slice(1)
+      if (hasExistingClosingQuote) {
+        const keyEnd = baseSnippet.indexOf('"')
+        if (keyEnd >= 0) {
+          baseSnippet =
+            baseSnippet.slice(0, keyEnd) + baseSnippet.slice(keyEnd + 1)
+        }
+      }
+    }
+  }
   const isColorThemeValue =
     /"workbench\.colorTheme"\s*:\s*"(?:[^"\\]|\\.)*$/.test(
       text.slice(0, offset),
@@ -108,13 +126,15 @@ export const resolve = (textDocument, offset, name, completionItem) => {
   const valueEndOffset = isColorThemeValue
     ? getStringEndOffset(text, offset)
     : offset
-  const resolvedSnippet = ShouldAppendPropertyComma.shouldAppendPropertyComma(
-    text,
-    offset,
-    valueEndOffset,
-  )
-    ? `${snippet},`
-    : snippet
+  const resolvedSnippet =
+    completionItem.kind !== 1 &&
+    ShouldAppendPropertyComma.shouldAppendPropertyComma(
+      text,
+      offset,
+      valueEndOffset,
+    )
+      ? `${snippet},`
+      : snippet
   const selectionRange =
     GetCompletionSelectionRange.getCompletionSelectionRange(
       completionItem.kind,
