@@ -64,6 +64,31 @@ test('reports a property type mismatch', () => {
   ])
 })
 
+test('validates oneOf string enums and booleans', () => {
+  const lineNumbersSchema = {
+    properties: {
+      lineNumbers: {
+        oneOf: [{ enum: ['on', 'off'], type: 'string' }, { type: 'boolean' }],
+      },
+    },
+    type: 'object',
+  }
+  for (const value of ['"on"', '"off"', 'true', 'false']) {
+    expect(
+      JsonDiagnostics.getDiagnostics(
+        `{"lineNumbers":${value}}`,
+        lineNumbersSchema,
+      ),
+    ).toEqual([])
+  }
+  expect(
+    JsonDiagnostics.getDiagnostics(
+      '{"lineNumbers":"invalid"}',
+      lineNumbersSchema,
+    ),
+  ).toEqual([expect.objectContaining({ code: 'oneOf' })])
+})
+
 test('validates inclusive numeric minimum and maximum bounds', () => {
   const boundedSchema = {
     properties: {

@@ -35,6 +35,15 @@ export const getSchemaProperties = (
     return properties
   }
 
+  if (schema.oneOf) {
+    const properties: { [key: string]: JsonSchema } = {}
+    for (const subSchema of schema.oneOf) {
+      const subProperties = getSchemaProperties(rootSchema, subSchema)
+      Object.assign(properties, subProperties)
+    }
+    return properties
+  }
+
   return {}
 }
 
