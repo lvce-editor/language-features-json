@@ -87,12 +87,48 @@ const getStringEndOffset = (text: string, offset: number): number => {
   return offset
 }
 
+const isInsideString = (text: string, offset: number): boolean => {
+  let inString = false
+  let escaped = false
+  for (let index = 0; index < offset; index++) {
+    const char = text[index]
+    if (escaped) {
+      escaped = false
+      continue
+    }
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+    if (char === '"') {
+      inString = !inString
+    }
+  }
+  return inString
+}
+
 export const resolve = (textDocument, offset, name, completionItem) => {
-  const baseSnippet =
+  let baseSnippet =
     typeof completionItem.snippet === 'string'
       ? completionItem.snippet
       : QuoteString.quoteString(name)
   const text = textDocument.text
+  let hasOpenPropertyQuote = false
+  if (completionItem.kind === 1 && baseSnippet.startsWith('"')) {
+    const afterCursor = text.slice(offset)
+    hasOpenPropertyQuote = isInsideString(text, offset)
+    const hasExistingClosingQuote = afterCursor.startsWith('"')
+    if (hasOpenPropertyQuote) {
+      baseSnippet = baseSnippet.slice(1)
+      if (hasExistingClosingQuote) {
+        const keyEnd = baseSnippet.indexOf('"')
+        if (keyEnd >= 0) {
+          baseSnippet =
+            baseSnippet.slice(0, keyEnd) + baseSnippet.slice(keyEnd + 1)
+        }
+      }
+    }
+  }
   const isColorThemeValue =
     /"workbench\.colorTheme"\s*:\s*"(?:[^"\\]|\\.)*$/.test(
       text.slice(0, offset),
@@ -108,22 +144,34 @@ export const resolve = (textDocument, offset, name, completionItem) => {
   const valueEndOffset = isColorThemeValue
     ? getStringEndOffset(text, offset)
     : offset
-  const resolvedSnippet = ShouldAppendPropertyComma.shouldAppendPropertyComma(
-    text,
-    offset,
-    valueEndOffset,
-  )
-    ? `${snippet},`
-    : snippet
+  const resolvedSnippet =
+    completionItem.kind !== 1 &&
+    ShouldAppendPropertyComma.shouldAppendPropertyComma(
+      text,
+      offset,
+      valueEndOffset,
+    )
+      ? `${snippet},`
+      : snippet
+  const selectionSnippet = hasOpenPropertyQuote
+    ? `"${resolvedSnippet}`
+    : resolvedSnippet
   const selectionRange =
     GetCompletionSelectionRange.getCompletionSelectionRange(
       completionItem.kind,
       name,
-      resolvedSnippet,
+      selectionSnippet,
     )
   return {
     ...completionItem,
     snippet: resolvedSnippet,
-    ...(selectionRange && { selectionRange }),
+    ...(selectionRange && {
+      selectionRange: hasOpenPropertyQuote
+        ? {
+            startOffset: selectionRange.startOffset - 1,
+            endOffset: selectionRange.endOffset - 1,
+          }
+        : selectionRange,
+    }),
   }
 }

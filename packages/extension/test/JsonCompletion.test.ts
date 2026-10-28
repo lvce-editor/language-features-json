@@ -72,6 +72,32 @@ test('resolves only the remaining theme id text after a typed prefix', async () 
   expect(result.snippet).not.toContain(',')
 })
 
+test.each([
+  ['an opening property quote', '{"scroll', 8, 'scrollSpeed": '],
+  ['a paired property quote', '{"scroll"}', 8, 'scrollSpeed: '],
+])('resolves property names with %s', (_description, text, offset, snippet) => {
+  const result = JsonCompletion.resolve({ text }, offset, 'scrollSpeed', {
+    kind: 1,
+    label: 'scrollSpeed',
+    snippet: '"scrollSpeed": ',
+  })
+
+  expect(result.snippet).toBe(snippet)
+})
+
+test('keeps property quotes when cursor follows a completed string', () => {
+  const text = '{"$schema":"schema.json","nested":{"entries":[{}]}}'
+  const offset = text.lastIndexOf('{') + 1
+
+  const result = JsonCompletion.resolve({ text }, offset, 'arrayOnly', {
+    kind: 1,
+    label: 'arrayOnly',
+    snippet: '"arrayOnly": true',
+  })
+
+  expect(result.snippet).toBe('"arrayOnly": true')
+})
+
 test('keeps unrelated setting enum suggestions independent of color themes', async () => {
   jest.mocked(getSchema).mockResolvedValue({
     properties: {

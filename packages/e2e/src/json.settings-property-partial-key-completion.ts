@@ -13,7 +13,7 @@ export const test: Test = async ({
 }) => {
   const tmpDir = await FileSystem.getTmpDir()
   const uri = `${tmpDir}/settings.json`
-  const text = '{editor}'
+  const text = '{"editor}'
   await FileSystem.writeFile(uri, text)
   await Workspace.setPath(tmpDir)
   await Main.openUri(uri)
