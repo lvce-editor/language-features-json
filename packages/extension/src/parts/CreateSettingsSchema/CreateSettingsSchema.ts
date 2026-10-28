@@ -42,6 +42,13 @@ const getEnumValues = (setting: SettingItem): readonly string[] | undefined => {
 }
 
 const createPropertySchema = (setting: SettingItem): JsonSchema => {
+  if (setting.jsonSchema) {
+    return {
+      ...setting.jsonSchema,
+      default: setting.value,
+      description: setting.description,
+    }
+  }
   return {
     default: setting.value,
     description: setting.description,

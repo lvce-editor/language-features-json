@@ -53,9 +53,11 @@ export const jsonCompletion = async (
   }
 
   if (propertySchema) {
-    const options =
-      propertySchema.enum ||
-      (propertySchema.type === 'boolean' ? [true, false] : [])
+    const schemas = propertySchema.oneOf || [propertySchema]
+    const options = schemas.flatMap(
+      (subSchema) =>
+        subSchema.enum || (subSchema.type === 'boolean' ? [true, false] : []),
+    )
     return options.map(EnumToCompletionOption.enumToCompletionOption)
   }
   if (node.type === TokenType.Object || node.type === TokenType.String) {

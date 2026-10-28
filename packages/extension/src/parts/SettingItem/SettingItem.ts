@@ -17,6 +17,7 @@ type SettingType =
 export interface SettingItem {
   readonly description?: string
   readonly id: string
+  readonly jsonSchema?: import('../JsonSchema/JsonSchema.ts').JsonSchema
   readonly maximum?: number
   readonly minimum?: number
   readonly options?: readonly SettingItemOption[]

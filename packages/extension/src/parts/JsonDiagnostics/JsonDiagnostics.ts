@@ -109,6 +109,24 @@ const validateNode = (
   if (!node) {
     return nodes.length
   }
+  if (schema.oneOf) {
+    const matches = schema.oneOf.some((subSchema) => {
+      const branchDiagnostics: Diagnostic[] = []
+      validateNode(text, nodes, index, subSchema, branchDiagnostics)
+      return branchDiagnostics.length === 0
+    })
+    if (!matches) {
+      diagnostics.push(
+        createDiagnostic(
+          text,
+          node,
+          'oneOf',
+          'Value does not match any allowed schema.',
+        ),
+      )
+    }
+    return getSubtreeEnd(nodes, index)
+  }
   const expectedTypes = getExpectedTypes(schema)
   if (!hasExpectedType(text, node, expectedTypes)) {
     const actualType = typeNames.get(node.type) || 'unknown'

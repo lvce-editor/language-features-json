@@ -121,6 +121,29 @@ test('keeps unrelated setting enum suggestions independent of color themes', asy
   expect(getColorThemeNames).not.toHaveBeenCalled()
 })
 
+test('suggests string enum and boolean values from oneOf schemas', async () => {
+  jest.mocked(getSchema).mockResolvedValue({
+    properties: {
+      'editor.lineNumbers': {
+        oneOf: [{ enum: ['on', 'off'], type: 'string' }, { type: 'boolean' }],
+      },
+    },
+  })
+  const text = '{"editor.lineNumbers": }'
+
+  const result = await JsonCompletion.jsonCompletion(
+    { uri: 'file:///settings.json', text },
+    text.indexOf('}') - 1,
+  )
+
+  expect(result.map((item) => item.snippet)).toEqual([
+    '"on"',
+    '"off"',
+    'true',
+    'false',
+  ])
+})
+
 test('queries contributed theme ids again for each completion request', async () => {
   jest.mocked(getSchema).mockResolvedValue({
     properties: {
