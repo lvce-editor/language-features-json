@@ -85,6 +85,19 @@ test.each([
   expect(result.snippet).toBe(snippet)
 })
 
+test('keeps property quotes when cursor follows a completed string', () => {
+  const text = '{"$schema":"schema.json","nested":{"entries":[{}]}}'
+  const offset = text.lastIndexOf('{') + 1
+
+  const result = JsonCompletion.resolve({ text }, offset, 'arrayOnly', {
+    kind: 1,
+    label: 'arrayOnly',
+    snippet: '"arrayOnly": true',
+  })
+
+  expect(result.snippet).toBe('"arrayOnly": true')
+})
+
 test('keeps unrelated setting enum suggestions independent of color themes', async () => {
   jest.mocked(getSchema).mockResolvedValue({
     properties: {
